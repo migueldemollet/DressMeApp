@@ -18,18 +18,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
-import java.util.logging.Filter
 
 
 private val filters: List<String> = listOf(
@@ -41,6 +41,7 @@ private val filters: List<String> = listOf(
     "Accessories"
 )
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen()
+                    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+                    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+                    MainScreen(screenWidth, screenHeight)
                 }
             }
         }
@@ -61,7 +64,7 @@ class MainActivity : ComponentActivity() {
 data class Garment(val title: String, val description: String, val image: Painter)
 
 @Composable
-fun MainScreen() {
+fun MainScreen(screenWidth: Dp, screenHeight: Dp) {
     Column() {
         FilterSection()
 
@@ -80,7 +83,7 @@ fun MainScreen() {
             Garment("Camiseta", "Camistea larga", img),
             Garment("Camiseta", "Camistea larga", img),
         )
-        BoxComponent(garments = garments)
+        BoxComponent(garments = garments, screenWidth = screenWidth, screenHeight = screenHeight)
     }
 }
 
@@ -186,7 +189,8 @@ fun FilterSection(){
 }
 
 @Composable
-fun BoxComponent(garments: List<Garment>) {
+fun BoxComponent(garments: List<Garment>, screenWidth: Dp, screenHeight: Dp) {
+    var widthComponent = screenWidth / 2 - 40.dp
     LazyColumn(modifier = Modifier.padding(10.dp)) {
         items(garments.windowed(2,2, true)) { garment ->
             Row(modifier = Modifier
@@ -194,7 +198,7 @@ fun BoxComponent(garments: List<Garment>) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 garment.forEach {
-                    CardBox(it)
+                    CardBox(it, widthComponent, screenHeight)
                 }
             }
         }
@@ -202,11 +206,11 @@ fun BoxComponent(garments: List<Garment>) {
 }
 
 @Composable
-fun CardBox(garment: Garment){
+fun CardBox(garment: Garment, componentWidth: Dp, componentHeight: Dp){
     Card(
         modifier = Modifier
-            .padding(15.dp)
-            .width(150.dp)
+            .padding(10.dp)
+            .width(componentWidth)
             .clickable(onClick = { /*TODO*/ }),
         shape = RoundedCornerShape(15.dp),
         elevation = 10.dp,
@@ -235,6 +239,8 @@ fun CardBox(garment: Garment){
 @Composable
 fun DefaultPreview() {
     DressMeAppTheme {
-        MainScreen()
+        val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+        val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+        MainScreen(screenWidth, screenHeight)
     }
 }
