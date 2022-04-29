@@ -1,5 +1,7 @@
 package com.migueldemollet.dressmeapp
 
+import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -95,7 +97,8 @@ fun TryButton(text: String) {
 @Composable
 fun TrySection(screenWidth: Dp,screenHeight: Dp) {
     Row(
-        modifier = Modifier.width(screenWidth),
+        modifier = Modifier.width(screenWidth)
+            .height(screenHeight/10),
         horizontalArrangement = Arrangement.Center
     )
     {
@@ -146,7 +149,7 @@ fun ProductBox(screenWidth: Dp, screenHeight: Dp, garment: Garment) {
 
 
 @Preview(showSystemUi = true)
-@Preview(showBackground = true)
+@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun DefaultPreview2() {
     DressMeAppTheme {
@@ -161,7 +164,8 @@ fun DefaultPreview2() {
                             )
                         }
                     },
-                    title = { Text("DressMeApp") }
+                    title = { Text("DressMeApp") },
+                    backgroundColor = MaterialTheme.colors.primary
 
                 )
             }
