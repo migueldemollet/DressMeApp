@@ -1,5 +1,6 @@
 package com.migueldemollet.dressmeapp
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -61,7 +63,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-data class Garment(val title: String, val description: String, val image: Painter)
+data class Garment(val title: String, val description: String, val image: Painter, val image2: Painter)
 
 @Composable
 fun MainScreen(screenWidth: Dp, screenHeight: Dp) {
@@ -69,19 +71,32 @@ fun MainScreen(screenWidth: Dp, screenHeight: Dp) {
         FilterSection()
 
         val img = painterResource(id = R.drawable.ic_launcher_background)
+        val dress_img = painterResource(id = R.drawable.dress_me_app)
         val garments: List<Garment> = listOf(
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
-            Garment("Camiseta", "Camistea larga", img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
+            Garment("Camiseta", "Camistea larga", img, dress_img),
         )
         BoxComponent(garments = garments, screenWidth = screenWidth, screenHeight = screenHeight)
     }
@@ -190,12 +205,13 @@ fun FilterSection(){
 
 @Composable
 fun BoxComponent(garments: List<Garment>, screenWidth: Dp, screenHeight: Dp) {
-    var widthComponent = screenWidth / 2 - 40.dp
-    LazyColumn(modifier = Modifier.padding(10.dp)) {
-        items(garments.windowed(2,2, true)) { garment ->
+    val widthComponent = screenWidth / 3 - 10.dp
+    LazyColumn() {
+        items(garments.windowed(3,3, true)) { garment ->
             Row(modifier = Modifier
-                .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                .fillMaxWidth()
+                .padding(bottom = 5.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
                 garment.forEach {
                     CardBox(it, widthComponent, screenHeight)
@@ -209,7 +225,7 @@ fun BoxComponent(garments: List<Garment>, screenWidth: Dp, screenHeight: Dp) {
 fun CardBox(garment: Garment, componentWidth: Dp, componentHeight: Dp){
     Card(
         modifier = Modifier
-            .padding(10.dp)
+            .padding(end = 5.dp)
             .width(componentWidth)
             .clickable(onClick = { /*TODO*/ }),
         shape = RoundedCornerShape(15.dp),
@@ -217,7 +233,9 @@ fun CardBox(garment: Garment, componentWidth: Dp, componentHeight: Dp){
         backgroundColor = MaterialTheme.colors.primary
 
     ) {
-        Column() {
+        Box(
+            contentAlignment = Alignment.TopEnd,
+        ) {
             Image(
                 painter = garment.image,
                 contentDescription = "",
@@ -225,17 +243,23 @@ fun CardBox(garment: Garment, componentWidth: Dp, componentHeight: Dp){
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.Center
             )
-            Text(
-                text = garment.title,
-                color = MaterialTheme.colors.onPrimary,
-                modifier = Modifier.padding(10.dp)
+            Image(
+                painter = garment.image2,
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(4.dp)
+                    .width(componentWidth / 2)
+                    .clip(RoundedCornerShape(15.dp)),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+                alpha = 0.5f
             )
         }
     }
 }
 
 @Preview(showSystemUi = true)
-@Preview(showBackground = true)
+@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun DefaultPreview() {
     DressMeAppTheme {
