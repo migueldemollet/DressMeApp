@@ -50,7 +50,8 @@ class ClotheActivity : ComponentActivity() {
 @Composable
 fun ImageSection(screenWidth: Dp, screenHeight: Dp,garment: Garment) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(10.dp)
     ) {
         ProductBox(screenWidth = screenWidth, screenHeight = screenHeight, garment)
         val img = painterResource(id = R.drawable.ic_launcher_background)
@@ -66,6 +67,7 @@ fun ImageSection(screenWidth: Dp, screenHeight: Dp,garment: Garment) {
             Garment("Camiseta", "Camistea larga", img, dress_img),
             Garment("Camiseta", "Camistea larga", img, dress_img),
         )
+        Spacer(modifier = Modifier.height(10.dp))
         ProductRecomendations(screenWidth = screenWidth, screenHeight = screenHeight, garments)
         TrySection(screenWidth,screenHeight)
     }
@@ -75,7 +77,8 @@ fun ImageSection(screenWidth: Dp, screenHeight: Dp,garment: Garment) {
 fun ProductRecomendations(screenWidth: Dp, screenHeight: Dp,garments: List<Garment>) {
     LazyRow(
         modifier = Modifier
-            .height(200.dp)
+            .height(screenHeight/4)
+            .fillMaxWidth()
     ) {
         items(garments) { garment ->
             CardBox(garment,screenWidth/3,screenHeight)
@@ -98,13 +101,13 @@ fun TryButton(text: String) {
 fun TrySection(screenWidth: Dp,screenHeight: Dp) {
     Row(
         modifier = Modifier.width(screenWidth)
-            .height(screenHeight/10),
+            .height(screenHeight/9),
         horizontalArrangement = Arrangement.Center
     )
     {
         Button(
             onClick = { /*TODO*/ },
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.padding(top = 10.dp)
                 .fillMaxHeight()
                 .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
@@ -122,7 +125,6 @@ fun TrySection(screenWidth: Dp,screenHeight: Dp) {
 fun ProductBox(screenWidth: Dp, screenHeight: Dp, garment: Garment) {
     Card(
         modifier = Modifier
-            .padding(10.dp)
             .width(screenWidth)
             .height(screenHeight/2),
         shape = RoundedCornerShape(15.dp),
