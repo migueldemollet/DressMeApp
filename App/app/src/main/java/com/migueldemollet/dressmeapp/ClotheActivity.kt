@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -119,8 +121,7 @@ fun ProductBox(screenWidth: Dp, screenHeight: Dp, garment: Garment) {
         modifier = Modifier
             .padding(10.dp)
             .width(screenWidth)
-            .height(screenHeight/2)
-            .clickable(onClick = { /*TODO*/ }),
+            .height(screenHeight/2),
         shape = RoundedCornerShape(15.dp),
         elevation = 10.dp,
         backgroundColor = MaterialTheme.colors.primary
@@ -152,7 +153,16 @@ fun DefaultPreview2() {
         Scaffold(
             topBar = {
                 TopAppBar(
+                    navigationIcon = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = null
+                            )
+                        }
+                    },
                     title = { Text("DressMeApp") }
+
                 )
             }
         ){
