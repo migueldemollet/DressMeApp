@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -114,7 +115,12 @@ fun SearchView(state: MutableState<TextFieldValue>) {
                 .fillMaxWidth()
                 .padding(10.dp),
             textStyle = TextStyle(
-                color = Color.Black,
+                // if theme is dark, use white text
+                color = if (isSystemInDarkTheme()) {
+                    Color.White
+                } else {
+                    Color.Black
+                },
                 fontSize = 18.sp
             ),
             placeholder = {
@@ -176,6 +182,7 @@ fun FilterComponent(filters: List<String>) {
             CardFilter(filter)
         }
     }
+    Spacer(modifier = Modifier.height(10.dp))
 }
 
 @Composable
@@ -263,8 +270,13 @@ fun CardBox(garment: Garment, componentWidth: Dp, componentHeight: Dp){
 @Composable
 fun DefaultPreview() {
     DressMeAppTheme {
-        val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-        val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-        MainScreen(screenWidth, screenHeight)
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colors.background
+        ){
+            val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+            val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+            MainScreen(screenWidth, screenHeight)
+        }
     }
 }
