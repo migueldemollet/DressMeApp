@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -51,7 +52,7 @@ class ClotheActivity : ComponentActivity() {
 fun ImageSection(screenWidth: Dp, screenHeight: Dp,garment: Garment) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(10.dp)
+
     ) {
         ProductBox(screenWidth = screenWidth, screenHeight = screenHeight, garment)
         val img = painterResource(id = R.drawable.ic_launcher_background)
@@ -67,21 +68,55 @@ fun ImageSection(screenWidth: Dp, screenHeight: Dp,garment: Garment) {
             Garment("Camiseta", "Camistea larga", img, dress_img),
             Garment("Camiseta", "Camistea larga", img, dress_img),
         )
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(5.dp))
         ProductRecomendations(screenWidth = screenWidth, screenHeight = screenHeight, garments)
         TrySection(screenWidth,screenHeight)
     }
 }
+@Composable
+fun CardBox2(garment: Garment, componentWidth: Dp, componentHeight: Dp){
+    Card(
+        modifier = Modifier
+            .padding(start = 10.dp, end = 10.dp)
+            .width(componentWidth)
+            .clickable(onClick = { /*TODO*/ }),
+        shape = RoundedCornerShape(15.dp),
+        elevation = 10.dp,
+        backgroundColor = MaterialTheme.colors.primary
 
+    ) {
+        Box(
+            contentAlignment = Alignment.TopEnd,
+        ) {
+            Image(
+                painter = garment.image,
+                contentDescription = "",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center
+            )
+            Image(
+                painter = garment.image2,
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(4.dp)
+                    .width(componentWidth / 2)
+                    .clip(RoundedCornerShape(15.dp)),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+                alpha = 0.5f
+            )
+        }
+    }
+}
 @Composable
 fun ProductRecomendations(screenWidth: Dp, screenHeight: Dp,garments: List<Garment>) {
     LazyRow(
         modifier = Modifier
-            .height(screenHeight/4)
-            .fillMaxWidth()
+            .height(screenHeight/4 + screenHeight/20)
     ) {
         items(garments) { garment ->
-            CardBox(garment,screenWidth/3,screenHeight)
+            CardBox2(garment,screenWidth/3,screenHeight)
             //ScreenHeight de momento no se utiliza
         }
     }
@@ -91,23 +126,21 @@ fun ProductScreen(screenWidth: Dp, screenHeight: Dp, garment: Garment) {
     ImageSection(screenWidth,screenHeight,garment)
 
 }
-@Composable
-fun TryButton(text: String) {
 
-
-}
 
 @Composable
 fun TrySection(screenWidth: Dp,screenHeight: Dp) {
     Row(
         modifier = Modifier.width(screenWidth)
-            .height(screenHeight/9),
-        horizontalArrangement = Arrangement.Center
+            .fillMaxHeight()
+            .padding(start =10.dp ,end = 10.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     )
     {
         Button(
             onClick = { /*TODO*/ },
-            modifier = Modifier.padding(top = 10.dp)
+            modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)
                 .fillMaxHeight()
                 .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
@@ -126,6 +159,7 @@ fun ProductBox(screenWidth: Dp, screenHeight: Dp, garment: Garment) {
     Card(
         modifier = Modifier
             .width(screenWidth)
+            .padding(10.dp)
             .height(screenHeight/2),
         shape = RoundedCornerShape(15.dp),
         elevation = 10.dp,
