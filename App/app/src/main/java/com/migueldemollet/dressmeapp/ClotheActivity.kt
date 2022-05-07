@@ -6,14 +6,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,28 +25,22 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavController
 import com.migueldemollet.dressmeapp.model.Garment
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 import kotlinx.coroutines.CoroutineScope
@@ -58,9 +48,10 @@ import kotlinx.coroutines.launch
 
 class ClotheActivity : ComponentActivity() {
 
-    var isCameraSelected = false
-    var imageUri: Uri? = null
-    var bitmap: Bitmap? = null
+    private var isCameraSelected = false
+    private var imageUri: Uri? = null
+    private var bitmap: Bitmap? = null
+    private var garmentId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,15 +62,15 @@ class ClotheActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val  garmentId = intent.getIntExtra("garmentId", 0)
-                    ClotheScreen(garmentId = garmentId)
+                    garmentId = intent.getIntExtra("garmentId", 0)
+                    ClotheScreen()
                 }
             }
         }
     }
 
     @Composable
-    fun ClotheScreen(garmentId: Int) {
+    fun ClotheScreen() {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -102,13 +93,8 @@ class ClotheActivity : ComponentActivity() {
             val img = painterResource(id = R.drawable.ic_launcher_background)
             val dress_img = painterResource(id = R.drawable.dress_me_app)
             val garment = Garment(0, img, "Nombre del producto", dress_img)
-            ImageSection(garment, garmentId)
+            ImageSection(garment)
         }
-    }
-
-    @Composable
-    fun ImageSection(garment: Garment, garmentId: Int) {
-            TakePicture(bitmap = bitmap, garment, garmentId)
     }
 
     @Composable
@@ -163,8 +149,7 @@ class ClotheActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
-    fun TrySection(garmentId: Int, coroutineScope: CoroutineScope, bottomSheetModalState: ModalBottomSheetState) {
-        val context = LocalContext.current
+    fun TrySection(coroutineScope: CoroutineScope, bottomSheetModalState: ModalBottomSheetState) {
         Row(
             modifier = Modifier
                 .width(screenWidth)
@@ -177,7 +162,6 @@ class ClotheActivity : ComponentActivity() {
             Button(
                 onClick = {
                     coroutineScope.launch { bottomSheetModalState.show() }
-                    //context.startActivity(Intent(context, CamaraActivity::class.java))
                 },
                 modifier = Modifier
                     .padding(top = 10.dp, bottom = 10.dp)
@@ -224,7 +208,7 @@ class ClotheActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
-    private fun TakePicture(bitmap: Bitmap?, garment: Garment, garmentId: Int) {
+    private fun ImageSection(garment: Garment) {
         val context = LocalContext.current
         val bottomSheetModalState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
         val coroutineScope = rememberCoroutineScope()
@@ -436,7 +420,7 @@ class ClotheActivity : ComponentActivity() {
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 ProductRecomendations(garments)
-                TrySection(garmentId = 0, coroutineScope = coroutineScope, bottomSheetModalState = bottomSheetModalState)
+                TrySection(coroutineScope = coroutineScope, bottomSheetModalState = bottomSheetModalState)
             }
         }
 
@@ -452,6 +436,7 @@ class ClotheActivity : ComponentActivity() {
             val intent = Intent(this, ResultActivity::class.java)
             intent.putExtra("image", bitmap)
             intent.putExtra("url", imageUri)
+            intent.putExtra("garmentId", garmentId)
             this.startActivity(intent)
         }
     }
@@ -467,7 +452,7 @@ class ClotheActivity : ComponentActivity() {
             ) {
                 screenWidth = LocalConfiguration.current.screenWidthDp.dp
                 screenHeight = LocalConfiguration.current.screenHeightDp.dp
-                ClotheScreen(garmentId = 0)
+                ClotheScreen()
             }
         }
     }
