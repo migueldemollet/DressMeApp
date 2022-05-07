@@ -347,9 +347,7 @@ class ClotheActivity : ComponentActivity() {
                                             context, Manifest.permission.READ_EXTERNAL_STORAGE
                                         ) -> {
                                             galleryLauncher.launch("image/*")
-                                            coroutineScope.launch {
-                                                bottomSheetModalState.hide()
-                                            }
+                                            coroutineScope.launch { bottomSheetModalState.hide() }
                                         }
                                         else -> {
                                             isCameraSelected = false
@@ -442,42 +440,7 @@ class ClotheActivity : ComponentActivity() {
             }
         }
 
-        imageUri?.let {
-            if (!isCameraSelected) {
-                this.bitmap = if (Build.VERSION.SDK_INT < 28) {
-                    MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-                } else {
-                    val source = ImageDecoder.createSource(context.contentResolver, it)
-                    ImageDecoder.decodeBitmap(source)
-                }
-            }
 
-            this.bitmap?.let { btm ->
-                Image(
-                    bitmap = btm.asImageBitmap(),
-                    contentDescription = "Image",
-                    alignment = Alignment.TopCenter,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.45f)
-                        .padding(top = 10.dp),
-                    contentScale = ContentScale.Fit
-                )
-            }
-        }
-
-        bitmap?.let { btm ->
-            Image(
-                bitmap = btm.asImageBitmap(),
-                contentDescription = "Image",
-                alignment = Alignment.TopCenter,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.45f)
-                    .padding(top = 10.dp),
-                contentScale = ContentScale.Fit
-            )
-        }
     }
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -485,13 +448,11 @@ class ClotheActivity : ComponentActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
-            if (data?.data != null) {
-                
-            }
+
             val intent = Intent(this, ResultActivity::class.java)
             intent.putExtra("image", bitmap)
+            intent.putExtra("url", imageUri)
             this.startActivity(intent)
-
         }
     }
 
