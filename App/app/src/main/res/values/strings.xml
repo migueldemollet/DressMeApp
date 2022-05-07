@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DressMeApp</string>
+    <string name="title_activity_camara">CamaraActivity</string>
+    <string name="title_activity_clothe">ClotheActivity</string>
 </resources>

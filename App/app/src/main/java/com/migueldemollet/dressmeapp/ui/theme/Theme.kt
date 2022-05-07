@@ -11,6 +11,7 @@ private val DarkColorPalette = darkColors(
     primaryVariant = Turquoise700,
     secondary = Teal200,
     background = Black200,
+    onBackground = White200,
     onSurface = Gray500
 )
 
@@ -19,7 +20,8 @@ private val LightColorPalette = lightColors(
     primaryVariant = Turquoise700,
     secondary = Teal200,
     onPrimary = White200,
-    onBackground = White200,
+    background = White200,
+    onBackground = Black200,
     onSurface = Gray200,
     onSecondary = Black200,
 
