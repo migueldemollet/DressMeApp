@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.model.Filter
 import com.migueldemollet.dressmeapp.model.Garment
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
@@ -52,6 +53,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    val systemUiController = rememberSystemUiController()
+                    systemUiController.setStatusBarColor(MaterialTheme.colors.background)
                     screenWidth = LocalConfiguration.current.screenWidthDp.dp
                     screenHeight = LocalConfiguration.current.screenHeightDp.dp
                     MainScreen()
@@ -71,7 +74,8 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun MainScreen() {
-        Column() {
+        Column {
+            logo()
             FilterSection()
 
             val img = painterResource(id = R.drawable.ic_launcher_background)
@@ -108,6 +112,32 @@ class MainActivity : ComponentActivity() {
             BoxComponent(garments = garments)
         }
     }
+
+    @Composable
+    fun logo() {
+        val logo = if (isSystemInDarkTheme()) {
+            painterResource(id = R.drawable.dress_me_app_white)
+        } else {
+            painterResource(id = R.drawable.dress_me_app_black)
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+
+        ) {
+            Image(
+                painter = logo,
+                contentDescription = "logo_image",
+                modifier = Modifier
+                    .width(screenWidth /4)
+                    .clickable(onClick = {
+
+                    })
+            )
+        }
+
+    }
+
 
     @Composable
     fun SearchView(state: MutableState<TextFieldValue>) {

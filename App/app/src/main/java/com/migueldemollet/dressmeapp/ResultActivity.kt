@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 
 @ExperimentalMaterialApi
@@ -36,6 +37,8 @@ class ResultActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    val systemUiController = rememberSystemUiController()
+                    systemUiController.setStatusBarColor(MaterialTheme.colors.primary)
                     val img = getImage()!!
                     val garmentId = intent.getIntExtra("garmentId", 0)
                     ResultScreen(image = img)

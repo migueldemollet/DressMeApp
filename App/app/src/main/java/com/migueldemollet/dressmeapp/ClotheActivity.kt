@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.model.Garment
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 import kotlinx.coroutines.CoroutineScope
@@ -62,6 +63,8 @@ class ClotheActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    val systemUiController = rememberSystemUiController()
+                    systemUiController.setStatusBarColor(MaterialTheme.colors.primary)
                     garmentId = intent.getIntExtra("garmentId", 0)
                     ClotheScreen()
                 }
