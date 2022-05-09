@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -129,7 +130,7 @@ class MainActivity : ComponentActivity() {
                 painter = logo,
                 contentDescription = "logo_image",
                 modifier = Modifier
-                    .width(screenWidth /4)
+                    .width(screenWidth / 4)
                     .clickable(onClick = {
 
                     })

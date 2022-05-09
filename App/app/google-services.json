@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "786058273769",
+    "firebase_url": "https://dressmeapp-348622-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "dressmeapp-348622",
+    "storage_bucket": "dressmeapp-348622.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:786058273769:android:ff3e0dd5f5bd8c2d99e178",
+        "android_client_info": {
+          "package_name": "com.migueldemollet.dressmeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "786058273769-ujvh6qd64pvjbj5tu9dcj79eamsg41c3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoqz3otQWJG5OKwXX8vtPve9z6dNbrrQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "786058273769-ujvh6qd64pvjbj5tu9dcj79eamsg41c3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
