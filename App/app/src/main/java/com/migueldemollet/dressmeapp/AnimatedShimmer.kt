@@ -10,10 +10,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AnimatedShimmer() {
+fun AnimatedShimmer(screenWidth: Dp) {
     val ShimmerColors = listOf(
         Color.LightGray.copy(alpha = 0.6f),
         Color.LightGray.copy(alpha = 0.2f),
@@ -41,19 +42,24 @@ fun AnimatedShimmer() {
             y = translitioAnim.value
         ),
     )
-    
-    ShimmerMainScreen(brush = brush)
+    val widthComponentCard = screenWidth / 3 - 10.dp
+    val widthComponentFilter = screenWidth / 4 - 10.dp
+    ShimmerMainScreen(
+        brush = brush,
+        widthComponentFilter = widthComponentFilter,
+        widthComponentCard = widthComponentCard
+    )
 }
 
 @Composable
-fun ShimmerMainScreen(brush: Brush) {
+fun ShimmerMainScreen(brush: Brush, widthComponentFilter: Dp, widthComponentCard: Dp) {
     Column(
         modifier = Modifier.fillMaxHeight(),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(10.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             Spacer(
@@ -79,15 +85,17 @@ fun ShimmerMainScreen(brush: Brush) {
             )
         }
         Row(
-            modifier = Modifier.fillMaxWidth()
-
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            repeat(5) {
+            repeat(4) {
                 Spacer(
                     modifier = Modifier
-                        .width(100.dp)
-                        .height(60.dp)
-                        .padding(15.dp)
+                        .width(widthComponentFilter)
+                        .height(40.dp)
+                        .padding(end = 5.dp)
                         .background(brush)
                 )
             }
@@ -95,31 +103,21 @@ fun ShimmerMainScreen(brush: Brush) {
         }
         repeat(8) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 5.dp),
+                horizontalArrangement = Arrangement.Center
 
             ) {
-                Spacer(
-                    modifier = Modifier
-                        .width(130.dp)
-                        .height(130.dp)
-                        .padding(15.dp)
-                        .background(brush)
-                )
-                Spacer(
-                    modifier = Modifier
-                        .width(130.dp)
-                        .height(130.dp)
-                        .padding(15.dp)
-                        .background(brush)
-                )
-                Spacer(
-                    modifier = Modifier
-                        .width(130.dp)
-                        .height(130.dp)
-                        .padding(15.dp)
-                        .background(brush)
-                )
+                repeat(3) {
+                    Spacer(
+                        modifier = Modifier
+                            .width(widthComponentCard)
+                            .height(130.dp)
+                            .padding(end = 5.dp)
+                            .background(brush)
+                    )
+                }
             }
         }
     }
