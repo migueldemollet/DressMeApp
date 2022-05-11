@@ -2,6 +2,7 @@ package com.migueldemollet.dressmeapp
 
 
 import android.content.ContentValues
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -14,10 +15,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -34,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -88,16 +88,43 @@ class ResultActivity : ComponentActivity() {
                 )
             }
         ) {
-            Image(
-                bitmap = image.asImageBitmap(),
-                contentDescription = "Image",
-                alignment = Alignment.TopCenter,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(top = 10.dp),
-                contentScale = ContentScale.Fit
-            )
+            Column() {
+                Image(
+                    bitmap = image.asImageBitmap(),
+                    contentDescription = "Image",
+                    alignment = Alignment.TopCenter,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.90f),
+                    contentScale = ContentScale.Fit
+                )
+                Row(
+                    modifier = Modifier
+                        .width(screenWidth)
+                        .fillMaxHeight()
+                        .padding(start = 10.dp, end = 10.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                )
+                {
+                    Button(
+                        onClick = {
+                            ShareImage(image)
+                        },
+                        modifier = Modifier
+                            .padding(top = 10.dp, bottom = 10.dp)
+                            .fillMaxHeight()
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.primary,
+                            contentColor = MaterialTheme.colors.onPrimary
+                        ),
+                        shape = RoundedCornerShape(15.dp)
+                    ) {
+                        Text("Share")
+                    }
+                }
+            }
         }
     }
 
@@ -146,6 +173,16 @@ class ResultActivity : ComponentActivity() {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
             Toast.makeText(this, "Saved Image", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun ShareImage(bitmap: Bitmap) {
+        val path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "IMG_${System.currentTimeMillis()}", null)
+        val uri = Uri.parse (path)
+
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.setType("image/jpeg")
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+        startActivity(Intent.createChooser(intent, "Share images to.."))
     }
 
 @Preview(showSystemUi = true)
