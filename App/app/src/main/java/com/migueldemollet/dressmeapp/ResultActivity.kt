@@ -1,12 +1,16 @@
 package com.migueldemollet.dressmeapp
 
 
+import android.content.ContentValues
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -17,14 +21,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 @ExperimentalMaterialApi
 class ResultActivity : ComponentActivity() {
@@ -58,12 +70,21 @@ class ResultActivity : ComponentActivity() {
                         }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
-                                contentDescription = null
+                                contentDescription = "Go back"
                             )
                         }
                     },
                     title = { Text("DressMeApp") },
-                    backgroundColor = MaterialTheme.colors.primary
+                    backgroundColor = MaterialTheme.colors.primary,
+                    actions = {
+                        IconButton(onClick = { SaveImage(image) }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.download),
+                                contentDescription = "Save",
+                                tint = Color.White
+                            )
+                        }
+                    }
                 )
             }
         ) {
@@ -73,7 +94,7 @@ class ResultActivity : ComponentActivity() {
                 alignment = Alignment.TopCenter,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.45f)
+                    .fillMaxHeight()
                     .padding(top = 10.dp),
                 contentScale = ContentScale.Fit
             )
@@ -98,4 +119,48 @@ class ResultActivity : ComponentActivity() {
         return img2
     }
 
+    private fun SaveImage(bitmap: Bitmap) {
+        val filename = "IMG_${System.currentTimeMillis()}.jpg"
+        var fos: OutputStream? = null
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            this.contentResolver.also { resolver ->
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/DressMeApp")
+                }
+                val imageUri: Uri? =
+                    resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+                fos = imageUri?.let { resolver.openOutputStream(it) }
+            }
+        } else {
+            val imagesDir =
+                Environment.getExternalStoragePublicDirectory("/Pictures/DressMeApp")
+            val image = File(imagesDir, filename)
+            fos = FileOutputStream(image)
+        }
+
+        fos?.use {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+            Toast.makeText(this, "Saved Image", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ResultScreenPreview() {
+    DressMeAppTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colors.background
+        ) {
+            screenWidth = LocalConfiguration.current.screenWidthDp.dp
+            screenHeight = LocalConfiguration.current.screenHeightDp.dp
+            ResultScreen(image = getImage()!!)
+        }
+    }
+}
 }
