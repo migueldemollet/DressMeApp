@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -20,7 +21,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,10 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
-import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
+import java.io.*
 
 @ExperimentalMaterialApi
 class ResultActivity : ComponentActivity() {
@@ -52,8 +49,9 @@ class ResultActivity : ComponentActivity() {
                     val systemUiController = rememberSystemUiController()
                     systemUiController.setStatusBarColor(MaterialTheme.colors.primary)
                     val img = getImage()!!
-                    val garmentId = intent.getIntExtra("garmentId", 0)
-                    ResultScreen(image = img)
+
+                    val img_resized = getScaledDownBitmap(img, 1000, false)
+                    ResultScreen(image = img_resized)
                 }
             }
         }
@@ -128,22 +126,61 @@ class ResultActivity : ComponentActivity() {
         }
     }
 
+    fun getScaledDownBitmap(bitmap: Bitmap, threshold: Int, isNecessaryToKeepOrig: Boolean): Bitmap {
+        val width = bitmap.width
+        val height = bitmap.height
+        var newWidth = width
+        var newHeight = height
+        if (width > height && width > threshold) {
+            newWidth = threshold
+            newHeight = (height * newWidth.toFloat() / width).toInt()
+        }
+        if (width > height && width <= threshold) {
+            return bitmap
+        }
+        if (width < height && height > threshold) {
+            newHeight = threshold
+            newWidth = (width * newHeight.toFloat() / height).toInt()
+        }
+        if (width < height && height <= threshold) {
+            return bitmap
+        }
+        if (width == height && width > threshold) {
+            newWidth = threshold
+            newHeight = newWidth
+        }
+        return if (width == height && width <= threshold) {
+            bitmap
+        } else getResizedBitmap(bitmap, newWidth, newHeight, isNecessaryToKeepOrig)
+    }
+
+    private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int, isNecessaryToKeepOrig: Boolean): Bitmap {
+        val width = bm.width
+        val height = bm.height
+        val scaleWidth = newWidth.toFloat() / width
+        val scaleHeight = newHeight.toFloat() / height
+        val matrix = Matrix()
+        matrix.postScale(scaleWidth, scaleHeight)
+
+        val resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false)
+        if (!isNecessaryToKeepOrig) {
+            bm.recycle()
+        }
+        return resizedBitmap
+    }
 
     private fun getImage(): Bitmap? {
-        val img = intent.getParcelableExtra<Bitmap>("image")
-        if (img != null) { return img }
-
-        val url = intent.getParcelableExtra<Uri>("url")
-        var img2: Bitmap? = null
-        url?.let {
-            img2 = if (Build.VERSION.SDK_INT < 28) {
+        val uri = intent.getParcelableExtra<Uri>("uri")
+        var img: Bitmap? = null
+        uri?.let {
+            img = if (Build.VERSION.SDK_INT < 28) {
                 MediaStore.Images.Media.getBitmap(this.contentResolver, it)
             } else {
                 val source = ImageDecoder.createSource(this.contentResolver, it)
                 ImageDecoder.decodeBitmap(source)
             }
         }
-        return img2
+        return img
     }
 
     private fun SaveImage(bitmap: Bitmap) {

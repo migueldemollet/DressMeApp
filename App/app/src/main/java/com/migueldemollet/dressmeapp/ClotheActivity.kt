@@ -2,12 +2,17 @@ package com.migueldemollet.dressmeapp
 
 import android.Manifest
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -41,17 +46,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.model.Garment
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.IOException
+import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ClotheActivity : ComponentActivity() {
 
     private var isCameraSelected = false
     private var imageUri: Uri? = null
-    private var bitmap: Bitmap? = null
     private var garmentId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -215,19 +225,20 @@ class ClotheActivity : ComponentActivity() {
         val context = LocalContext.current
         val bottomSheetModalState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
         val coroutineScope = rememberCoroutineScope()
+        val uritmp = createTmpFile()
 
         val galleryLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
         ) { uri: Uri? ->
             this.imageUri = uri
-            this.bitmap = null
         }
 
         val cameraLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.TakePicturePreview()
-        ) { btm: Bitmap? ->
-            this.bitmap = btm
-            this.imageUri = null
+            contract = ActivityResultContracts.TakePicture()
+        ) { saved: Boolean ->
+            if (saved) {
+                this.imageUri = uritmp
+            }
         }
 
         val permissionLauncher = rememberLauncherForActivityResult(
@@ -235,7 +246,7 @@ class ClotheActivity : ComponentActivity() {
         ) { isGranted: Boolean ->
             if (isGranted) {
                 if (isCameraSelected) {
-                    cameraLauncher.launch()
+                    cameraLauncher.launch(uritmp)
                 } else {
                     galleryLauncher.launch("image/*")
                 }
@@ -287,7 +298,7 @@ class ClotheActivity : ComponentActivity() {
                                         ContextCompat.checkSelfPermission(
                                             context, Manifest.permission.CAMERA
                                         ) -> {
-                                            cameraLauncher.launch()
+                                            cameraLauncher.launch(uritmp)
                                             coroutineScope.launch {
                                                 bottomSheetModalState.hide()
                                             }
@@ -426,8 +437,12 @@ class ClotheActivity : ComponentActivity() {
                 TrySection(coroutineScope = coroutineScope, bottomSheetModalState = bottomSheetModalState)
             }
         }
+    }
 
-
+    private fun createTmpFile(): Uri {
+        val imageFile = File(this.cacheDir, "tmp_image.jpg")
+        imageFile.createNewFile()
+        return FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", imageFile)
     }
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -435,10 +450,8 @@ class ClotheActivity : ComponentActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
-
             val intent = Intent(this, ResultActivity::class.java)
-            intent.putExtra("image", bitmap)
-            intent.putExtra("url", imageUri)
+            intent.putExtra("uri", imageUri)
             intent.putExtra("garmentId", garmentId)
             this.startActivity(intent)
         }
