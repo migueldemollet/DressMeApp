@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -36,7 +35,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.AsyncImage
+import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 import com.migueldemollet.dressmeapp.model.Filter
 import com.migueldemollet.dressmeapp.model.Garment
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
@@ -46,6 +51,7 @@ var screenHeight = 0.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_DressMeApp)
         super.onCreate(savedInstanceState)
         setContent {
             DressMeAppTheme {
@@ -58,6 +64,7 @@ class MainActivity : ComponentActivity() {
                     systemUiController.setStatusBarColor(MaterialTheme.colors.background)
                     screenWidth = LocalConfiguration.current.screenWidthDp.dp
                     screenHeight = LocalConfiguration.current.screenHeightDp.dp
+
                     MainScreen()
                 }
             }
@@ -81,7 +88,7 @@ class MainActivity : ComponentActivity() {
 
             val img = painterResource(id = R.drawable.ic_launcher_background)
             val dress_img = painterResource(id = R.drawable.dress_me_app)
-            val garments: List<Garment> = listOf(
+            /*val garments: List<Garment> = listOf(
                 Garment(0, img, "Nombre del producto", dress_img),
                 Garment(1, img, "Nombre del producto", dress_img),
                 Garment(2, img, "Nombre del producto", dress_img),
@@ -109,8 +116,8 @@ class MainActivity : ComponentActivity() {
                 Garment(24, img, "Nombre del producto", dress_img),
                 Garment(25, img, "Nombre del producto", dress_img),
                 Garment(26, img, "Nombre del producto", dress_img),
-            )
-            BoxComponent(garments = garments)
+            )*/
+            //BoxComponent(garments = garments)
         }
     }
 
@@ -125,7 +132,7 @@ class MainActivity : ComponentActivity() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
 
-        ) {
+            ) {
             Image(
                 painter = logo,
                 contentDescription = "logo_image",
@@ -250,7 +257,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun BoxComponent(garments: List<Garment>) {
+    fun BoxComponent(garments: MutableList<Garment>) {
         val widthComponent = screenWidth / 3 - 10.dp
         LazyColumn() {
             items(garments.windowed(3, 3, true)) { garment ->
@@ -275,6 +282,7 @@ class MainActivity : ComponentActivity() {
             modifier = Modifier
                 .padding(end = 5.dp)
                 .width(componentWidth)
+                .height(componentWidth)
                 .clickable(onClick = {
                     val intent = Intent(context, ClotheActivity::class.java)
                     intent.putExtra("garmentId", garment.id)
@@ -288,19 +296,26 @@ class MainActivity : ComponentActivity() {
             Box(
                 contentAlignment = Alignment.TopEnd,
             ) {
-                Image(
-                    painter = garment.img,
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(garment.img)
+                        .crossfade(false)
+                        .build(),
                     contentDescription = "",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
                     alignment = Alignment.Center
                 )
-                Image(
-                    painter = garment.brand,
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(garment.img)
+                        .crossfade(false)
+                        .build(),
                     contentDescription = "",
                     modifier = Modifier
                         .padding(4.dp)
                         .width(componentWidth / 2)
+                        .height(componentWidth / 2)
                         .clip(RoundedCornerShape(15.dp)),
                     contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,

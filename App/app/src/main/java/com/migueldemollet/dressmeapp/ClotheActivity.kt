@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import coil.compose.rememberImagePainter
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.model.Garment
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
@@ -105,8 +106,8 @@ class ClotheActivity : ComponentActivity() {
         ) {
             val img = painterResource(id = R.drawable.ic_launcher_background)
             val dress_img = painterResource(id = R.drawable.dress_me_app)
-            val garment = Garment(0, img, "Nombre del producto", dress_img)
-            ImageSection(garment)
+            //val garment = Garment(0, img, "Nombre del producto", dress_img, "texto", "color", "type")
+            //ImageSection(garment)
         }
     }
 
@@ -126,14 +127,24 @@ class ClotheActivity : ComponentActivity() {
                 contentAlignment = Alignment.TopEnd,
             ) {
                 Image(
-                    painter = garment.img,
+                    painter = rememberImagePainter(
+                        data = garment.img,
+                        builder = {
+                            crossfade(false)
+                        }
+                    ),
                     contentDescription = "",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
                     alignment = Alignment.Center
                 )
                 Image(
-                    painter = garment.brand,
+                    painter = rememberImagePainter(
+                        data = garment.brand,
+                        builder = {
+                            crossfade(false)
+                        }
+                    ),
                     contentDescription = "",
                     modifier = Modifier
                         .padding(4.dp)
@@ -209,7 +220,12 @@ class ClotheActivity : ComponentActivity() {
                     .width(screenWidth)
             ) {
                 Image(
-                    painter = garment.img,
+                    painter = rememberImagePainter(
+                        data = garment.img,
+                        builder = {
+                            crossfade(false)
+                        }
+                    ),
                     contentDescription = "",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,
@@ -422,18 +438,18 @@ class ClotheActivity : ComponentActivity() {
                 ProductBox(garment)
                 val img = painterResource(id = R.drawable.ic_launcher_background)
                 val dress_img = painterResource(id = R.drawable.dress_me_app)
-                val garments: List<Garment> = listOf(
-                    Garment(0, img, "Nombre del producto", dress_img),
-                    Garment(1, img, "Nombre del producto", dress_img),
-                    Garment(2, img, "Nombre del producto", dress_img),
-                    Garment(3, img, "Nombre del producto", dress_img),
-                    Garment(4, img, "Nombre del producto", dress_img),
-                    Garment(5, img, "Nombre del producto", dress_img),
-                    Garment(6, img, "Nombre del producto", dress_img),
-                    Garment(7, img, "Nombre del producto", dress_img)
-                )
+                /*val garments: List<Garment> = listOf(
+                    Garment(0, img, "Nombre del producto", dress_img, "texto", "color", "type"),
+                    Garment(1, img, "Nombre del producto", dress_img, "texto", "color", "type"),
+                    Garment(2, img, "Nombre del producto", dress_img, "texto", "color", "type"),
+                    Garment(3, img, "Nombre del producto", dress_img, "texto", "color", "type"),
+                    Garment(4, img, "Nombre del producto", dress_img, "texto", "color", "type"),
+                    Garment(5, img, "Nombre del producto", dress_img, "texto", "color", "type"),
+                    Garment(6, img, "Nombre del producto", dress_img, "texto", "color", "type"),
+                    Garment(7, img, "Nombre del producto", dress_img, "texto", "color", "type")
+                )*/
                 Spacer(modifier = Modifier.height(5.dp))
-                ProductRecomendations(garments)
+                //ProductRecomendations(garments)
                 TrySection(coroutineScope = coroutineScope, bottomSheetModalState = bottomSheetModalState)
             }
         }
