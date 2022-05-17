@@ -9,6 +9,7 @@
     <uses-feature android:name="android.hardware.camera"/>
 
     <application
+        android:name=".FireBaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -26,11 +27,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity
-            android:name=".ClotheActivity"
-            android:exported="false"
-            android:label="@string/title_activity_clothe"
-            android:theme="@style/Theme.DressMeApp" />
         <activity
             android:name=".ResultActivity"
             android:exported="false"

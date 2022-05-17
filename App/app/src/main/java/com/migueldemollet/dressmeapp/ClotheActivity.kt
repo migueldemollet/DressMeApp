@@ -58,7 +58,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-
+/*
 class ClotheActivity : ComponentActivity() {
 
     private var isCameraSelected = false
@@ -128,7 +128,7 @@ class ClotheActivity : ComponentActivity() {
             ) {
                 Image(
                     painter = rememberImagePainter(
-                        data = garment.img,
+                        data = garment.image,
                         builder = {
                             crossfade(false)
                         }
@@ -488,4 +488,4 @@ class ClotheActivity : ComponentActivity() {
             }
         }
     }
-}
+}*/
