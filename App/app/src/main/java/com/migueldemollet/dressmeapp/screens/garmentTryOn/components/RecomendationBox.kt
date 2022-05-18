@@ -1,9 +1,11 @@
-package com.migueldemollet.dressmeapp.screens.main.components.garments
+package com.migueldemollet.dressmeapp.screens.garmentTryOn.components
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -12,31 +14,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
-import coil.request.ImageRequest
-//import com.migueldemollet.dressmeapp.ClotheActivity
 import com.migueldemollet.dressmeapp.model.Garment
 
 @Composable
-fun CardBox(
-    garment: Garment,
-    componentWidth: Dp,
-    omponentHeight: Dp,
-    onItemClick: (String) -> Unit
-) {
-    val context = LocalContext.current
+fun RecomendationBox(garment: Garment, componentWidth: Dp, componentHeight: Dp) {
     Card(
         modifier = Modifier
-            .padding(end = 5.dp)
+            .padding(start = 10.dp, end = 10.dp)
             .width(componentWidth)
-            .height(omponentHeight)
-            .clickable(onClick = { onItemClick(garment.id) }),
+            .clickable(onClick = { /*TODO*/ }),
         shape = RoundedCornerShape(15.dp),
         elevation = 10.dp,
         backgroundColor = MaterialTheme.colors.primary
@@ -58,7 +47,6 @@ fun CardBox(
                 modifier = Modifier
                     .padding(4.dp)
                     .width(componentWidth / 2)
-                    .height(omponentHeight / 2)
                     .clip(RoundedCornerShape(15.dp)),
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.Center,

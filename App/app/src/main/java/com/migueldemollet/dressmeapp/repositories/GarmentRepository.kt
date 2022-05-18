@@ -28,4 +28,16 @@ constructor(
             emit(Result.Error<List<Garment>>(message = e.localizedMessage ?: "Error"))
         }
     }
+
+    fun getGarmentById(id: String) : Flow<Result<Garment>> = flow {
+        try {
+            emit(Result.Loading<Garment>())
+
+            val garment = garmentList.whereEqualTo("id", id).get().await().toObjects(Garment::class.java).first()
+
+            emit(Result.Success<Garment>(data = garment))
+        } catch (e: Exception) {
+            emit(Result.Error<Garment>(message = e.localizedMessage ?: "Error"))
+        }
+    }
 }

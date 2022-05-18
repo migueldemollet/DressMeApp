@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.R
 import com.migueldemollet.dressmeapp.model.Filter
+import com.migueldemollet.dressmeapp.navigation.AppScreens
 import com.migueldemollet.dressmeapp.screenHeight
 import com.migueldemollet.dressmeapp.screenWidth
 import com.migueldemollet.dressmeapp.screens.main.components.SearchView
@@ -39,7 +40,7 @@ fun MainScreen(
     state: GarmentListState,
     navController: NavHostController,
     isRefreshing: Boolean,
-    refreshData: () -> Unit
+    refreshData: () -> Unit,
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(MaterialTheme.colors.background)
@@ -51,7 +52,9 @@ fun MainScreen(
             state = state,
             isRefreshing = isRefreshing,
             refreshData = refreshData,
-            navController =  navController
+            onItemClick = { garmentId ->
+                navController.navigate(AppScreens.GarmentTryOnScreen.route + "/$garmentId")
+            }
         )
     }
 }
