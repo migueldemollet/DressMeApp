@@ -40,4 +40,21 @@ constructor(
             emit(Result.Error<Garment>(message = e.localizedMessage ?: "Error"))
         }
     }
+
+    fun getGarmentListByFilters(id: String, color: String, type: String) : Flow<Result<List<Garment>>> = flow {
+        try {
+            emit(Result.Loading<List<Garment>>())
+            val garmentList = garmentList
+                .whereNotEqualTo("id", id)
+                .whereEqualTo("color", color)
+                .whereEqualTo("type", type)
+                .get().await().map { document ->
+                    document.toObject(Garment::class.java)
+                }
+
+            emit(Result.Success<List<Garment>>(data = garmentList))
+        } catch (e: Exception) {
+            emit(Result.Error<List<Garment>>(message = e.localizedMessage ?: "Error"))
+        }
+    }
 }

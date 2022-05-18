@@ -46,21 +46,24 @@ fun MainScreen(
     systemUiController.setStatusBarColor(MaterialTheme.colors.background)
 
     Column {
-        logo()
+        Logo()
         FilterSection()
         BoxComponent(
             state = state,
             isRefreshing = isRefreshing,
             refreshData = refreshData,
-            onItemClick = { garmentId ->
-                navController.navigate(AppScreens.GarmentTryOnScreen.route + "/$garmentId")
+            onItemClick = { garment ->
+                navController.navigate(
+                    AppScreens.GarmentTryOnScreen.route +
+                            "/${garment.id}/${garment.color}/${garment.type}"
+                )
             }
         )
     }
 }
 
 @Composable
-fun logo() {
+private fun Logo() {
     val logo = if (isSystemInDarkTheme()) {
         painterResource(id = R.drawable.dress_me_app_white)
     } else {

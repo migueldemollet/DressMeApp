@@ -10,13 +10,13 @@ import com.migueldemollet.dressmeapp.screenHeight
 import com.migueldemollet.dressmeapp.screenWidth
 
 @Composable
-fun ProductRecomendations(garments: List<Garment>) {
+fun ProductRecommendations(garments: List<Garment>) {
     LazyRow(
         modifier = Modifier
             .height(screenHeight / 4 + screenHeight / 20)
     ) {
         items(garments) { garment ->
-            RecomendationBox(garment, screenWidth / 3, screenHeight)
+            RecommendationBox(garment, screenWidth / 3, screenHeight)
             //ScreenHeight de momento no se utiliza
         }
     }

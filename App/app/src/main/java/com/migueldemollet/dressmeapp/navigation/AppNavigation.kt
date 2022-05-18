@@ -31,17 +31,19 @@ fun AppNavigation() {
             )
         }
         composable(
-            route = AppScreens.GarmentTryOnScreen.route + "/{garmentId}",
-        ) { backStackEntry ->
+            route = AppScreens.GarmentTryOnScreen.route + "/{garmentId}/{garmentColor}/{garmentType}",
+        ) {
             val viewModel: GarmentTryOnViewModel = hiltViewModel()
             val state = viewModel.state.value
+            val state2 = viewModel.state2.value
             val isRefreshing = viewModel.isRefreshing.collectAsState()
-            val id = backStackEntry.arguments?.getString("garmentId")!!
             GarmentTryOnScreen(
                 state = state,
+                state2 = state2,
                 navController = navController,
                 isRefreshing = isRefreshing.value,
-                refreshData = viewModel::getGarment
+                refreshData = viewModel::getGarment,
+                refreshData2 = viewModel::getGarmentListFilters
             )
         }
     }

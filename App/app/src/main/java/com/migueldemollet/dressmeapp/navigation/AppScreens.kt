@@ -14,8 +14,10 @@ sealed class AppScreens(
     )
     object GarmentTryOnScreen: AppScreens(
         route = "garment_try_on_screen",
-        arguments = listOf(navArgument("garmentId") {
-            type = NavType.StringType
-        })
+        arguments = listOf(
+            navArgument("garmentId") { type = NavType.StringType },
+            navArgument("garmentColor") { type = NavType.StringType },
+            navArgument("garmentType") { type = NavType.StringType }
+        )
     )
 }

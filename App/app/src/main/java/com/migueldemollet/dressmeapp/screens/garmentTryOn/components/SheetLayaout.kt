@@ -33,7 +33,10 @@ import com.migueldemollet.dressmeapp.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SheetLayaout(garment: Garment) {
+fun SheetLayout(
+    garment: Garment?,
+    similarGarments: List<Garment>
+) {
     val context = LocalContext.current
     val bottomSheetModalState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -232,10 +235,8 @@ fun SheetLayaout(garment: Garment) {
 
             ) {
             ProductBox(garment)
-            val img = painterResource(id = R.drawable.ic_launcher_background)
-            val dress_img = painterResource(id = R.drawable.dress_me_app)
             Spacer(modifier = Modifier.height(5.dp))
-            //ProductRecomendations(garments)
+            ProductRecommendations(similarGarments)
             TrySection(coroutineScope = coroutineScope, bottomSheetModalState = bottomSheetModalState)
         }
     }

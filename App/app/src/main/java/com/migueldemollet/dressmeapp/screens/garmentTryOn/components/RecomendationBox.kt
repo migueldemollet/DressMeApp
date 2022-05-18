@@ -20,7 +20,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.migueldemollet.dressmeapp.model.Garment
 
 @Composable
-fun RecomendationBox(garment: Garment, componentWidth: Dp, componentHeight: Dp) {
+fun RecommendationBox(garment: Garment, componentWidth: Dp, componentHeight: Dp) {
     Card(
         modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)

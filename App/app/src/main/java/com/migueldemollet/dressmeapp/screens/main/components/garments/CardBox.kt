@@ -28,7 +28,7 @@ fun CardBox(
     garment: Garment,
     componentWidth: Dp,
     omponentHeight: Dp,
-    onItemClick: (String) -> Unit
+    onItemClick: (Garment) -> Unit
 ) {
     val context = LocalContext.current
     Card(
@@ -36,7 +36,7 @@ fun CardBox(
             .padding(end = 5.dp)
             .width(componentWidth)
             .height(omponentHeight)
-            .clickable(onClick = { onItemClick(garment.id) }),
+            .clickable(onClick = { onItemClick(garment) }),
         shape = RoundedCornerShape(15.dp),
         elevation = 10.dp,
         backgroundColor = MaterialTheme.colors.primary

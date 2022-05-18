@@ -16,7 +16,7 @@ import com.migueldemollet.dressmeapp.screenHeight
 import com.migueldemollet.dressmeapp.screenWidth
 
 @Composable
-fun ProductBox(garment: Garment) {
+fun ProductBox(garment: Garment?) {
     Card(
         modifier = Modifier
             .width(screenWidth)
@@ -33,7 +33,7 @@ fun ProductBox(garment: Garment) {
                 .width(screenWidth)
         ) {
             Image(
-                painter = rememberAsyncImagePainter(garment.image),
+                painter = rememberAsyncImagePainter(garment?.image),
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,

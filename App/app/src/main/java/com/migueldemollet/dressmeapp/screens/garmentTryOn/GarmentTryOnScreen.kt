@@ -10,15 +10,18 @@ import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.BuildConfig
-import com.migueldemollet.dressmeapp.screens.garmentTryOn.components.SheetLayaout
+import com.migueldemollet.dressmeapp.screens.garmentTryOn.components.SheetLayout
+import com.migueldemollet.dressmeapp.screens.main.GarmentListState
 import java.io.File
 
 @Composable
 fun GarmentTryOnScreen(
     state: GarmentTryOnState,
+    state2: GarmentListState,
     navController: NavHostController,
     isRefreshing: Boolean,
-    refreshData: (String) -> Unit
+    refreshData: (String) -> Unit,
+    refreshData2: (String, String, String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -40,7 +43,10 @@ fun GarmentTryOnScreen(
     ) {
         val systemUiController = rememberSystemUiController()
         systemUiController.setStatusBarColor(MaterialTheme.colors.primary)
-        state.garment?.let { it1 -> SheetLayaout(it1) }
+        val garment = state.garment
+        val similarGarments = state2.garments
+        SheetLayout(garment, similarGarments)
+
     }
 }
 
