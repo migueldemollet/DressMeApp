@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.navigation.AppNavigation
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +34,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    val systemUiController = rememberSystemUiController()
+                    systemUiController.setStatusBarColor(MaterialTheme.colors.background)
                     screenWidth = LocalConfiguration.current.screenWidthDp.dp
                     screenHeight = LocalConfiguration.current.screenHeightDp.dp
                     AppNavigation()
