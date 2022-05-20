@@ -1,6 +1,7 @@
 package com.migueldemollet.dressmeapp.repositories
 
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.Source
 import com.migueldemollet.dressmeapp.model.Garment
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -19,7 +20,7 @@ constructor(
         try {
             emit(Result.Loading<List<Garment>>())
 
-            val garmentList = garmentList.get().await().map { document ->
+            val garmentList = garmentList.get(Source.CACHE).await().map { document ->
                 document.toObject(Garment::class.java)
             }
 
@@ -33,7 +34,7 @@ constructor(
         try {
             emit(Result.Loading<Garment>())
 
-            val garment = garmentList.whereEqualTo("id", id).get().await().toObjects(Garment::class.java).first()
+            val garment = garmentList.whereEqualTo("id", id).get(Source.CACHE).await().toObjects(Garment::class.java).first()
 
             emit(Result.Success<Garment>(data = garment))
         } catch (e: Exception) {
@@ -48,7 +49,7 @@ constructor(
                 .whereNotEqualTo("id", id)
                 .whereEqualTo("color", color)
                 .whereEqualTo("type", type)
-                .get().await().map { document ->
+                .get(Source.CACHE).await().map { document ->
                     document.toObject(Garment::class.java)
                 }
 

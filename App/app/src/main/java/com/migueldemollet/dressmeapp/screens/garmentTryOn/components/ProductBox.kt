@@ -9,8 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.migueldemollet.dressmeapp.R
 import com.migueldemollet.dressmeapp.model.Garment
 import com.migueldemollet.dressmeapp.screenHeight
 import com.migueldemollet.dressmeapp.screenWidth
@@ -33,7 +35,10 @@ fun ProductBox(garment: Garment?) {
                 .width(screenWidth)
         ) {
             Image(
-                painter = rememberAsyncImagePainter(garment?.image),
+                painter = rememberAsyncImagePainter(
+                    model = garment?.image,
+                    placeholder = painterResource(id = R.drawable.load_image)
+                ),
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,

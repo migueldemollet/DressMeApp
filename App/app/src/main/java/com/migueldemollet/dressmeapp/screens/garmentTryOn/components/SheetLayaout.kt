@@ -30,12 +30,13 @@ import com.migueldemollet.dressmeapp.model.Garment
 import com.migueldemollet.dressmeapp.screens.garmentTryOn.createTmpFile
 import kotlinx.coroutines.launch
 import com.migueldemollet.dressmeapp.R
+import com.migueldemollet.dressmeapp.screens.main.GarmentListState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SheetLayout(
     garment: Garment?,
-    similarGarments: List<Garment>
+    state: GarmentListState
 ) {
     val context = LocalContext.current
     val bottomSheetModalState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -236,7 +237,7 @@ fun SheetLayout(
             ) {
             ProductBox(garment)
             Spacer(modifier = Modifier.height(5.dp))
-            ProductRecommendations(similarGarments)
+            ProductRecommendations(state)
             TrySection(coroutineScope = coroutineScope, bottomSheetModalState = bottomSheetModalState)
         }
     }

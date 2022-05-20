@@ -1,6 +1,5 @@
 package com.migueldemollet.dressmeapp.screens.main.components.garments
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,16 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
-//import com.migueldemollet.dressmeapp.ClotheActivity
 import com.migueldemollet.dressmeapp.model.Garment
+import com.migueldemollet.dressmeapp.R
 
 @Composable
 fun CardBox(
@@ -30,7 +26,6 @@ fun CardBox(
     omponentHeight: Dp,
     onItemClick: (Garment) -> Unit
 ) {
-    val context = LocalContext.current
     Card(
         modifier = Modifier
             .padding(end = 5.dp)
@@ -42,18 +37,24 @@ fun CardBox(
         backgroundColor = MaterialTheme.colors.primary
 
     ) {
+        var image_loaded = false
         Box(
             contentAlignment = Alignment.TopEnd,
         ) {
             Image(
-                painter = rememberAsyncImagePainter(garment.image),
+                painter = rememberAsyncImagePainter(
+                    model = garment.image,
+                    placeholder = painterResource(id =R.drawable.load_image),
+                ),
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.Center
             )
             Image(
-                painter = rememberAsyncImagePainter(garment.brand),
+                painter = rememberAsyncImagePainter(
+                    model = garment.brand,
+                ),
                 contentDescription = "",
                 modifier = Modifier
                     .padding(4.dp)

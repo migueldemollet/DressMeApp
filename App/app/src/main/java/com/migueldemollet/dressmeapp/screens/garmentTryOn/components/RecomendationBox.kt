@@ -14,9 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.migueldemollet.dressmeapp.R
 import com.migueldemollet.dressmeapp.model.Garment
 
 @Composable
@@ -35,7 +37,10 @@ fun RecommendationBox(garment: Garment, componentWidth: Dp, componentHeight: Dp)
             contentAlignment = Alignment.TopEnd,
         ) {
             Image(
-                painter = rememberAsyncImagePainter(garment.image),
+                painter = rememberAsyncImagePainter(
+                    model = garment.image,
+                    placeholder = painterResource(id = R.drawable.load_image)
+                ),
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
