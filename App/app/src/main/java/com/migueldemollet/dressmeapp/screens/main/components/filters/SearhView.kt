@@ -1,4 +1,4 @@
-package com.migueldemollet.dressmeapp.screens.main.components
+package com.migueldemollet.dressmeapp.screens.main.components.filters
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column

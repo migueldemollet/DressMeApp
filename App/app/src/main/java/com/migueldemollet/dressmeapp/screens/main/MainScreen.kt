@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -21,7 +22,7 @@ import com.migueldemollet.dressmeapp.model.Filter
 import com.migueldemollet.dressmeapp.navigation.AppScreens
 import com.migueldemollet.dressmeapp.screenHeight
 import com.migueldemollet.dressmeapp.screenWidth
-import com.migueldemollet.dressmeapp.screens.main.components.SearchView
+import com.migueldemollet.dressmeapp.screens.main.components.filters.SearchView
 import com.migueldemollet.dressmeapp.screens.main.components.filters.CardFilter
 import com.migueldemollet.dressmeapp.screens.main.components.garments.BoxComponent
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
@@ -44,12 +45,13 @@ fun MainScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(MaterialTheme.colors.background)
-
+    val textState = remember { mutableStateOf(TextFieldValue("")) }
     Column {
         Logo()
-        FilterSection()
+        FilterSection(textState)
         BoxComponent(
             state = state,
+            textState = textState,
             isRefreshing = isRefreshing,
             refreshData = refreshData,
             onItemClick = { garment ->
@@ -86,9 +88,8 @@ private fun Logo() {
 }
 
 @Composable
-fun FilterSection() {
+fun FilterSection(textState: MutableState<TextFieldValue>) {
     Column() {
-        val textState = remember { mutableStateOf(TextFieldValue("")) }
         SearchView(textState)
         FilterComponent(filters = filters)
     }
