@@ -22,12 +22,17 @@ import com.migueldemollet.dressmeapp.R
 import com.migueldemollet.dressmeapp.model.Garment
 
 @Composable
-fun RecommendationBox(garment: Garment, componentWidth: Dp, componentHeight: Dp) {
+fun RecommendationBox(
+    garment: Garment,
+    componentWidth: Dp,
+    componentHeight: Dp,
+    onItemClick: (Garment) -> Unit
+) {
     Card(
         modifier = Modifier
             .padding(start = 10.dp, end = 10.dp)
             .width(componentWidth)
-            .clickable(onClick = { /*TODO*/ }),
+            .clickable(onClick = { onItemClick(garment) }),
         shape = RoundedCornerShape(15.dp),
         elevation = 10.dp,
         backgroundColor = MaterialTheme.colors.primary

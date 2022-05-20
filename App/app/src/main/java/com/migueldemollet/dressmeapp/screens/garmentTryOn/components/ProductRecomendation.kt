@@ -16,7 +16,10 @@ import com.migueldemollet.dressmeapp.screenWidth
 import com.migueldemollet.dressmeapp.screens.main.GarmentListState
 
 @Composable
-fun ProductRecommendations(state: GarmentListState) {
+fun ProductRecommendations(
+    state: GarmentListState,
+    onItemClick: (Garment) -> Unit
+) {
     val garments = state.garments
     Box() {
         LazyRow(
@@ -24,7 +27,7 @@ fun ProductRecommendations(state: GarmentListState) {
                 .height(screenHeight / 4 + screenHeight / 20)
         ) {
             items(garments) { garment ->
-                RecommendationBox(garment, screenWidth / 3, screenHeight)
+                RecommendationBox(garment, screenWidth / 3, screenHeight, onItemClick = onItemClick)
                 //ScreenHeight de momento no se utiliza
             }
         }

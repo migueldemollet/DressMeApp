@@ -9,6 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.migueldemollet.dressmeapp.AnimatedShimmer
 import com.migueldemollet.dressmeapp.SplashSscreen
 import com.migueldemollet.dressmeapp.model.Garment
@@ -25,16 +27,21 @@ fun BoxComponent(
     val componentWidth = screenWidth / 3 - 10.dp
     val componentHeight = screenWidth / 3 - 10.dp
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn() {
-            items(state.garments.windowed(3, 3, true)) { garment ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 5.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    garment.forEach {
-                        CardBox(it, componentWidth, componentHeight, onItemClick = onItemClick)
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing),
+            onRefresh = refreshData
+        ) {
+            LazyColumn() {
+                items(state.garments.windowed(3, 3, true)) { garment ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        garment.forEach {
+                            CardBox(it, componentWidth, componentHeight, onItemClick = onItemClick)
+                        }
                     }
                 }
             }
@@ -43,5 +50,4 @@ fun BoxComponent(
             AnimatedShimmer(screenWidth = screenWidth)
         }
     }
-
 }

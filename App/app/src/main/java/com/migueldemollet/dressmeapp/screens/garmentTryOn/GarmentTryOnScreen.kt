@@ -44,7 +44,7 @@ fun GarmentTryOnScreen(
         val systemUiController = rememberSystemUiController()
         systemUiController.setStatusBarColor(MaterialTheme.colors.primary)
         val garment = state.garment
-        SheetLayout(garment, state2)
+        SheetLayout(garment, state2, navController)
 
     }
 }

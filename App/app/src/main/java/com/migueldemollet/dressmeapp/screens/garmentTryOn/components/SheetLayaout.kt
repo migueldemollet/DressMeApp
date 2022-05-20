@@ -24,19 +24,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
 import com.migueldemollet.dressmeapp.imageUri
 import com.migueldemollet.dressmeapp.isCameraSelected
 import com.migueldemollet.dressmeapp.model.Garment
 import com.migueldemollet.dressmeapp.screens.garmentTryOn.createTmpFile
 import kotlinx.coroutines.launch
 import com.migueldemollet.dressmeapp.R
+import com.migueldemollet.dressmeapp.navigation.AppScreens
 import com.migueldemollet.dressmeapp.screens.main.GarmentListState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SheetLayout(
     garment: Garment?,
-    state: GarmentListState
+    state: GarmentListState,
+    navController: NavHostController
 ) {
     val context = LocalContext.current
     val bottomSheetModalState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -237,7 +240,15 @@ fun SheetLayout(
             ) {
             ProductBox(garment)
             Spacer(modifier = Modifier.height(5.dp))
-            ProductRecommendations(state)
+            ProductRecommendations(
+                state = state,
+                onItemClick = { garment ->
+                    navController.navigate(
+                    AppScreens.GarmentTryOnScreen.route +
+                            "/${garment.id}/${garment.color}/${garment.type}"
+                    )
+                }
+            )
             TrySection(coroutineScope = coroutineScope, bottomSheetModalState = bottomSheetModalState)
         }
     }

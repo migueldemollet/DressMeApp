@@ -37,7 +37,6 @@ fun CardBox(
         backgroundColor = MaterialTheme.colors.primary
 
     ) {
-        var image_loaded = false
         Box(
             contentAlignment = Alignment.TopEnd,
         ) {
