@@ -1,5 +1,6 @@
 package com.migueldemollet.dressmeapp.screens.main
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -45,6 +46,7 @@ fun MainScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(MaterialTheme.colors.background)
+
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     Column {
         Logo()
@@ -65,7 +67,7 @@ fun MainScreen(
 }
 
 @Composable
-private fun Logo() {
+fun Logo() {
     val logo = if (isSystemInDarkTheme()) {
         painterResource(id = R.drawable.dress_me_app_white)
     } else {

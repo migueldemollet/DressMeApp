@@ -9,14 +9,32 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.migueldemollet.dressmeapp.screens.garmentTryOn.GarmentTryOnScreen
 import com.migueldemollet.dressmeapp.screens.garmentTryOn.GarmentTryOnViewModel
+import com.migueldemollet.dressmeapp.screens.logIn.LogInScreen
 import com.migueldemollet.dressmeapp.screens.main.GarmentListViewModel
 import com.migueldemollet.dressmeapp.screens.main.MainScreen
+import com.migueldemollet.dressmeapp.screens.signUp.SignUpScreen
 
 @ExperimentalMaterialApi
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = AppScreens.MainScreen.route) {
+    NavHost(navController = navController, startDestination = AppScreens.LogInScreen.route) {
+        composable(
+            route = AppScreens.LogInScreen.route
+        ) {
+            LogInScreen(
+                navController = navController,
+            )
+        }
+
+        composable(
+            route = AppScreens.SignUpScreen.route
+        ) {
+            SignUpScreen(
+                navController = navController,
+            )
+        }
+
         composable(
             route = AppScreens.MainScreen.route
         ) {
