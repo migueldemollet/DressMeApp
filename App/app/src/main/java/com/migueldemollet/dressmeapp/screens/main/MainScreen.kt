@@ -1,11 +1,13 @@
 package com.migueldemollet.dressmeapp.screens.main
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -18,9 +20,10 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.R
 import com.migueldemollet.dressmeapp.model.Filter
+import com.migueldemollet.dressmeapp.navigation.AppScreens
 import com.migueldemollet.dressmeapp.screenHeight
 import com.migueldemollet.dressmeapp.screenWidth
-import com.migueldemollet.dressmeapp.screens.main.components.SearchView
+import com.migueldemollet.dressmeapp.screens.main.components.filters.SearchView
 import com.migueldemollet.dressmeapp.screens.main.components.filters.CardFilter
 import com.migueldemollet.dressmeapp.screens.main.components.garments.BoxComponent
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
@@ -39,25 +42,32 @@ fun MainScreen(
     state: GarmentListState,
     navController: NavHostController,
     isRefreshing: Boolean,
-    refreshData: () -> Unit
+    refreshData: () -> Unit,
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(MaterialTheme.colors.background)
 
+    val textState = remember { mutableStateOf(TextFieldValue("")) }
     Column {
-        logo()
-        FilterSection()
+        Logo()
+        FilterSection(textState)
         BoxComponent(
             state = state,
+            textState = textState,
             isRefreshing = isRefreshing,
             refreshData = refreshData,
-            navController =  navController
+            onItemClick = { garment ->
+                navController.navigate(
+                    AppScreens.GarmentTryOnScreen.route +
+                            "/${garment.id}/${garment.color}/${garment.type}"
+                )
+            }
         )
     }
 }
 
 @Composable
-fun logo() {
+fun Logo() {
     val logo = if (isSystemInDarkTheme()) {
         painterResource(id = R.drawable.dress_me_app_white)
     } else {
@@ -80,9 +90,8 @@ fun logo() {
 }
 
 @Composable
-fun FilterSection() {
+fun FilterSection(textState: MutableState<TextFieldValue>) {
     Column() {
-        val textState = remember { mutableStateOf(TextFieldValue("")) }
         SearchView(textState)
         FilterComponent(filters = filters)
     }

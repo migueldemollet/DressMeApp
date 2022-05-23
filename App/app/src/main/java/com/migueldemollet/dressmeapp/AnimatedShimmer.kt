@@ -52,55 +52,10 @@ fun AnimatedShimmer(screenWidth: Dp) {
 }
 
 @Composable
-fun ShimmerMainScreen(brush: Brush, widthComponentFilter: Dp, widthComponentCard: Dp) {
+private fun ShimmerMainScreen(brush: Brush, widthComponentFilter: Dp, widthComponentCard: Dp) {
     Column(
         modifier = Modifier.fillMaxHeight(),
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .height(100.dp)
-                    .width(100.dp)
-                    .background(brush)
-                    .clip(RoundedCornerShape(15.dp))
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .height(60.dp)
-                    .fillMaxWidth()
-                    .background(brush)
-                    .clip(RoundedCornerShape(15.dp))
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            repeat(4) {
-                Spacer(
-                    modifier = Modifier
-                        .width(widthComponentFilter)
-                        .height(40.dp)
-                        .padding(end = 5.dp)
-                        .background(brush)
-                )
-            }
-
-        }
         repeat(8) {
             Row(
                 modifier = Modifier
