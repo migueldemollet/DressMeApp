@@ -3,6 +3,7 @@ package com.migueldemollet.dressmeapp.screens.signUp.components
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -29,7 +30,8 @@ import com.migueldemollet.dressmeapp.screenWidth
 fun SignUpForm(
     textState: MutableState<TextFieldValue>,
     passwordState: MutableState<TextFieldValue>,
-    navController: NavController
+    navController: NavController,
+    onRegister: (String, String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -39,9 +41,9 @@ fun SignUpForm(
     ) {
         UserField(textState)
         Spacer(modifier = Modifier.height(15.dp))
-        PasswordField(passwordState)
+        PasswordField(textState, passwordState, onRegister)
         Spacer(modifier = Modifier.height(15.dp))
-        SignUpButton(textState, passwordState, navController)
+        SignUpButton(textState, passwordState, navController, onRegister)
     }
 }
 
@@ -87,7 +89,11 @@ private fun UserField(state: MutableState<TextFieldValue>) {
 }
 
 @Composable
-private fun PasswordField(state: MutableState<TextFieldValue>) {
+private fun PasswordField(
+    textState: MutableState<TextFieldValue>,
+    state: MutableState<TextFieldValue>,
+    onRegister: (String, String) -> Unit
+) {
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     OutlinedTextField(
         modifier = Modifier
@@ -145,7 +151,12 @@ private fun PasswordField(state: MutableState<TextFieldValue>) {
                     }
                 )
             }
-        }
+        },
+        keyboardActions = KeyboardActions(
+            onDone = {
+                onRegister(textState.value.text, state.value.text)
+            }
+        )
 
     )
 }
@@ -154,19 +165,14 @@ private fun PasswordField(state: MutableState<TextFieldValue>) {
 private fun SignUpButton(
     textState: MutableState<TextFieldValue>,
     passwordState: MutableState<TextFieldValue>,
-    navController: NavController
+    navController: NavController,
+    onRegister: (String, String) -> Unit
 ) {
     TextButton(
         modifier = Modifier
             .padding(horizontal = 35.dp)
             .width(screenWidth),
-        onClick = {
-            signUp(
-                email = textState.value.text,
-                password = passwordState.value.text,
-                navController = navController
-            )
-        },
+        onClick = { onRegister(textState.value.text, passwordState.value.text) },
         enabled = textState.value.text.isNotEmpty() && passwordState.value.text.isNotEmpty(),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.primary
@@ -175,23 +181,5 @@ private fun SignUpButton(
     ) {
         Text(text = "Sign Up")
     }
-}
-
-private fun signUp(
-    email: String,
-    password: String,
-    navController: NavController
-) {
-    FirebaseAuth.getInstance()
-        .createUserWithEmailAndPassword(email, password)
-        .addOnCompleteListener { result ->
-            if (result.isSuccessful) {
-                navController.navigate(
-                    AppScreens.MainScreen.route
-                )
-            } else {
-                TODO()
-            }
-        }
 }
 

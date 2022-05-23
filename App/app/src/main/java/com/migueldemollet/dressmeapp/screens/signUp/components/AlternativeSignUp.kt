@@ -1,8 +1,6 @@
 package com.migueldemollet.dressmeapp.screens.signUp.components
 
-import android.provider.Settings.Global.getString
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,25 +11,25 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.migueldemollet.dressmeapp.R
 import com.migueldemollet.dressmeapp.screenWidth
 
 @Composable
-fun AlternativeSignUp() {
-    GoogleLogin()
-    Spacer(modifier = Modifier.height(15.dp))
-    FacebookLogin()
+fun AlternativeSignUp(onRegisterWithGoogle: (Context) -> Unit) {
+    GoogleLogin(onRegisterWithGoogle)
+    //Spacer(modifier = Modifier.height(15.dp))
+    //FacebookLogin()
 }
 
 @Composable
-private fun GoogleLogin() {
+private fun GoogleLogin(onRegisterWithGoogle: (Context) -> Unit) {
+    val context = LocalContext.current
     TextButton(
         modifier = Modifier
             .padding(horizontal = 35.dp)
             .width(screenWidth),
-        onClick = { /*TODO*/ },
+        onClick = { onRegisterWithGoogle(context) },
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color(219, 68,55)
         ),

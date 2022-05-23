@@ -16,7 +16,7 @@ import com.migueldemollet.dressmeapp.screenWidth
 
 @Composable
 fun LogInButton(
-    navController: NavController
+    navController: NavController,
 ) {
     TextButton(
         modifier = Modifier

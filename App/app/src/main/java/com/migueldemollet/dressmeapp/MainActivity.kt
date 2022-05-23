@@ -6,13 +6,23 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.migueldemollet.dressmeapp.navigation.AppNavigation
+import com.migueldemollet.dressmeapp.navigation.AppScreens
+import com.migueldemollet.dressmeapp.screens.logIn.LogInViewModel
+import com.migueldemollet.dressmeapp.screens.signUp.SignUpViewModel
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +48,13 @@ class MainActivity : ComponentActivity() {
                     systemUiController.setStatusBarColor(MaterialTheme.colors.background)
                     screenWidth = LocalConfiguration.current.screenWidthDp.dp
                     screenHeight = LocalConfiguration.current.screenHeightDp.dp
-                    AppNavigation()
+                    //Firebase.auth.signOut()
+                    val start = if (Firebase.auth.currentUser != null) {
+                        AppScreens.MainScreen.route
+                    } else {
+                        AppScreens.LogInScreen.route
+                    }
+                    AppNavigation(start)
                 }
             }
         }
@@ -48,11 +64,25 @@ class MainActivity : ComponentActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == Activity.RESULT_OK) {
-            val intent = Intent(this, ResultActivity::class.java)
-            intent.putExtra("uri", imageUri)
-            //intent.putExtra("garmentId", garmentId)
-            this.startActivity(intent)
+        when (requestCode) {
+            1 -> {
+                val viewModel: LogInViewModel by viewModels()
+                val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+                viewModel.handleLogInResult(task)
+            }
+            2 -> {
+                val viewModel: SignUpViewModel by viewModels()
+                val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+                viewModel.handleSignUpResult(task)
+            }
+            else -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val intent = Intent(this, ResultActivity::class.java)
+                    intent.putExtra("uri", imageUri)
+                    //intent.putExtra("garmentId", garmentId)
+                    this.startActivity(intent)
+                }
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.migueldemollet.dressmeapp.screens.logIn
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -16,6 +17,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.screenHeight
 import com.migueldemollet.dressmeapp.screenWidth
 import com.migueldemollet.dressmeapp.screens.logIn.components.AlternativeLogIn
+import com.migueldemollet.dressmeapp.screens.logIn.components.EventDialog
 import com.migueldemollet.dressmeapp.screens.logIn.components.LogInForm
 import com.migueldemollet.dressmeapp.screens.logIn.components.SignUpButton
 import com.migueldemollet.dressmeapp.screens.main.Logo
@@ -23,7 +25,11 @@ import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 
 @Composable
 fun LogInScreen(
-    navController: NavController
+    state: LoginState,
+    onLogin: (String, String) -> Unit,
+    onLoginWithGoogle: (Context) -> Unit,
+    navController: NavController,
+    onDismissDialog: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -38,14 +44,23 @@ fun LogInScreen(
         LogInForm(
             textState = textState,
             passwordState = passwordState,
-            navController = navController
+            navController = navController,
+            onLogin = onLogin,
         )
         Text(
             modifier = Modifier.padding(16.dp),
             text = "Or",
             color = Color.LightGray
         )
-        AlternativeLogIn()
+        AlternativeLogIn(onLoginWithGoogle = onLoginWithGoogle)
+
+        if(state.errorMessage != null){
+            EventDialog(
+                errorMessage = state.errorMessage,
+                onDismiss = onDismissDialog
+            )
+        }
+
     }
     Column(
         modifier = Modifier

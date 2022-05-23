@@ -1,5 +1,6 @@
 package com.migueldemollet.dressmeapp.screens.signUp
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -15,6 +16,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.screenHeight
 import com.migueldemollet.dressmeapp.screenWidth
+import com.migueldemollet.dressmeapp.screens.logIn.components.EventDialog
 import com.migueldemollet.dressmeapp.screens.main.Logo
 import com.migueldemollet.dressmeapp.screens.signUp.components.AlternativeSignUp
 import com.migueldemollet.dressmeapp.screens.signUp.components.LogInButton
@@ -23,7 +25,11 @@ import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 
 @Composable
 fun SignUpScreen(
-    navController: NavController
+    state: SignUpState,
+    onRegister: (String, String) -> Unit,
+    onRegisterWithGoogle: (Context) -> Unit,
+    onDismissDialog: () -> Unit,
+    navController: NavController,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -38,14 +44,23 @@ fun SignUpScreen(
         SignUpForm(
             textState = textState,
             passwordState = passwordState,
-            navController = navController
+            navController = navController,
+            onRegister = onRegister,
         )
         Text(
             modifier = Modifier.padding(16.dp),
             text = "Or",
             color = Color.LightGray
         )
-        AlternativeSignUp()
+        AlternativeSignUp(onRegisterWithGoogle = onRegisterWithGoogle)
+
+        if(state.errorMessage != null){
+            EventDialog(
+                errorMessage = state.errorMessage,
+                onDismiss = onDismissDialog
+            )
+        }
+
     }
     Column(
         modifier = Modifier
