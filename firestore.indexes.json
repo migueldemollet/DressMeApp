@@ -1,0 +1,23 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "garments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "color",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "id",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
