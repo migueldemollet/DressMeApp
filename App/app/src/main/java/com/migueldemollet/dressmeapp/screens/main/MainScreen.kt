@@ -1,15 +1,13 @@
 package com.migueldemollet.dressmeapp.screens.main
 
-import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -23,10 +21,12 @@ import com.migueldemollet.dressmeapp.model.Filter
 import com.migueldemollet.dressmeapp.navigation.AppScreens
 import com.migueldemollet.dressmeapp.screenHeight
 import com.migueldemollet.dressmeapp.screenWidth
+import com.migueldemollet.dressmeapp.screens.main.components.LeftMenu
 import com.migueldemollet.dressmeapp.screens.main.components.filters.SearchView
 import com.migueldemollet.dressmeapp.screens.main.components.filters.CardFilter
 import com.migueldemollet.dressmeapp.screens.main.components.garments.BoxComponent
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
+import kotlinx.coroutines.launch
 
 private val filters: List<Filter> = listOf(
     Filter(0, "All"),
@@ -44,25 +44,57 @@ fun MainScreen(
     isRefreshing: Boolean,
     refreshData: () -> Unit,
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(MaterialTheme.colors.background)
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "DressMeApp")
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
 
-    val textState = remember { mutableStateOf(TextFieldValue("")) }
-    Column {
-        Logo()
-        FilterSection(textState)
-        BoxComponent(
-            state = state,
-            textState = textState,
-            isRefreshing = isRefreshing,
-            refreshData = refreshData,
-            onItemClick = { garment ->
-                navController.navigate(
-                    AppScreens.GarmentTryOnScreen.route +
-                            "/${garment.id}/${garment.color}/${garment.type}"
-                )
-            }
-        )
+                            scope.launch {
+                                scaffoldState.drawerState.open()
+                            }
+                        },
+                    ) {
+                        Icon(
+                            Icons.Rounded.Menu,
+                            contentDescription = ""
+                        )
+                    }
+                },
+                backgroundColor = MaterialTheme.colors.primary)
+        },
+
+
+        drawerContent = { LeftMenu(navController = navController) },
+
+    ) {
+        val systemUiController = rememberSystemUiController()
+        systemUiController.setStatusBarColor(MaterialTheme.colors.primary)
+
+        val textState = remember { mutableStateOf(TextFieldValue("")) }
+        Column {
+            //Logo()
+            FilterSection(textState)
+            BoxComponent(
+                state = state,
+                textState = textState,
+                isRefreshing = isRefreshing,
+                refreshData = refreshData,
+                onItemClick = { garment ->
+                    navController.navigate(
+                        AppScreens.GarmentTryOnScreen.route +
+                                "/${garment.id}/${garment.color}/${garment.type}"
+                    )
+                }
+            )
+        }
     }
 }
 
