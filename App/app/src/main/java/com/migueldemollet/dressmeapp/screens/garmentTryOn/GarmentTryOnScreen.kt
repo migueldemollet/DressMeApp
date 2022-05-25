@@ -10,6 +10,7 @@ import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.BuildConfig
+import com.migueldemollet.dressmeapp.garmentId
 import com.migueldemollet.dressmeapp.screens.garmentTryOn.components.SheetLayout
 import com.migueldemollet.dressmeapp.screens.main.GarmentListState
 import java.io.File
@@ -44,6 +45,7 @@ fun GarmentTryOnScreen(
         val systemUiController = rememberSystemUiController()
         systemUiController.setStatusBarColor(MaterialTheme.colors.primary)
         val garment = state.garment
+        garmentId = garment?.id
         SheetLayout(garment, state2, navController)
 
     }

@@ -28,7 +28,7 @@
         </provider>
 
         <activity
-            android:name=".ResultActivity"
+            android:name=".screens.result.ResultActivity"
             android:exported="false"
             android:label="@string/title_activity_camara"
             android:theme="@style/Theme.DressMeApp" />

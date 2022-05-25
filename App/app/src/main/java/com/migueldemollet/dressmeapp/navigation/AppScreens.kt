@@ -31,9 +31,4 @@ sealed class AppScreens(
             navArgument("garmentType") { type = NavType.StringType }
         )
     )
-
-    object ResultScreen: AppScreens(
-        route = "result_screen",
-        arguments = emptyList()
-    )
 }

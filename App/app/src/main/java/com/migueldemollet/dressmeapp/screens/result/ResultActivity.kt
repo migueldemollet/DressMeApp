@@ -1,4 +1,4 @@
-package com.migueldemollet.dressmeapp
+package com.migueldemollet.dressmeapp.screens.result
 
 
 import android.content.ContentValues
@@ -32,6 +32,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.migueldemollet.dressmeapp.R
+import com.migueldemollet.dressmeapp.screenHeight
+import com.migueldemollet.dressmeapp.screenWidth
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 import java.io.*
 
@@ -50,8 +53,8 @@ class ResultActivity : ComponentActivity() {
                     systemUiController.setStatusBarColor(MaterialTheme.colors.primary)
                     val img = getImage()!!
 
-                    val img_resized = getScaledDownBitmap(img, 1000, false)
-                    ResultScreen(image = img_resized)
+                    val imgResized = getScaledDownBitmap(img, 1000, false)
+                    ResultScreen(image = imgResized)
                 }
             }
         }
@@ -75,7 +78,7 @@ class ResultActivity : ComponentActivity() {
                     title = { Text("DressMeApp") },
                     backgroundColor = MaterialTheme.colors.primary,
                     actions = {
-                        IconButton(onClick = { SaveImage(image) }) {
+                        IconButton(onClick = { saveImage(image) }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.download),
                                 contentDescription = "Save",
@@ -107,7 +110,7 @@ class ResultActivity : ComponentActivity() {
                 {
                     Button(
                         onClick = {
-                            ShareImage(image)
+                            shareImage(image)
                         },
                         modifier = Modifier
                             .padding(top = 10.dp, bottom = 10.dp)
@@ -126,7 +129,11 @@ class ResultActivity : ComponentActivity() {
         }
     }
 
-    fun getScaledDownBitmap(bitmap: Bitmap, threshold: Int, isNecessaryToKeepOrig: Boolean): Bitmap {
+    private fun getScaledDownBitmap(
+        bitmap: Bitmap,
+        threshold: Int,
+        isNecessaryToKeepOrig: Boolean
+    ): Bitmap {
         val width = bitmap.width
         val height = bitmap.height
         var newWidth = width
@@ -154,7 +161,12 @@ class ResultActivity : ComponentActivity() {
         } else getResizedBitmap(bitmap, newWidth, newHeight, isNecessaryToKeepOrig)
     }
 
-    private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int, isNecessaryToKeepOrig: Boolean): Bitmap {
+    private fun getResizedBitmap(
+        bm: Bitmap,
+        newWidth: Int,
+        newHeight: Int,
+        isNecessaryToKeepOrig: Boolean
+    ): Bitmap {
         val width = bm.width
         val height = bm.height
         val scaleWidth = newWidth.toFloat() / width
@@ -183,7 +195,7 @@ class ResultActivity : ComponentActivity() {
         return img
     }
 
-    private fun SaveImage(bitmap: Bitmap) {
+    private fun saveImage(bitmap: Bitmap) {
         val filename = "IMG_${System.currentTimeMillis()}.jpg"
         var fos: OutputStream? = null
 
@@ -212,8 +224,8 @@ class ResultActivity : ComponentActivity() {
         }
     }
 
-    private fun ShareImage(bitmap: Bitmap) {
-        val path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "IMG_${System.currentTimeMillis()}", null)
+    private fun shareImage(bitmap: Bitmap) {
+        val path = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "IMG_${System.currentTimeMillis()}", null)
         val uri = Uri.parse (path)
 
         val intent = Intent(Intent.ACTION_SEND)
@@ -222,19 +234,19 @@ class ResultActivity : ComponentActivity() {
         startActivity(Intent.createChooser(intent, "Share images to.."))
     }
 
-@Preview(showSystemUi = true)
-@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun ResultScreenPreview() {
-    DressMeAppTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
-        ) {
-            screenWidth = LocalConfiguration.current.screenWidthDp.dp
-            screenHeight = LocalConfiguration.current.screenHeightDp.dp
-            ResultScreen(image = getImage()!!)
+    @Preview(showSystemUi = true)
+    @Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+    @Composable
+    fun ResultScreenPreview() {
+        DressMeAppTheme {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colors.background
+            ) {
+                screenWidth = LocalConfiguration.current.screenWidthDp.dp
+                screenHeight = LocalConfiguration.current.screenHeightDp.dp
+                ResultScreen(image = getImage()!!)
+            }
         }
     }
-}
 }

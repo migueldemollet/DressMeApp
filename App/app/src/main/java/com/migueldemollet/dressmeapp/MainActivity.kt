@@ -16,12 +16,12 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.migueldemollet.dressmeapp.navigation.AppNavigation
 import com.migueldemollet.dressmeapp.navigation.AppScreens
 import com.migueldemollet.dressmeapp.screens.logIn.LogInViewModel
+import com.migueldemollet.dressmeapp.screens.result.ResultActivity
 import com.migueldemollet.dressmeapp.screens.signUp.SignUpViewModel
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +30,7 @@ var screenWidth = 0.dp
 var screenHeight = 0.dp
 var isCameraSelected = false
 var imageUri: Uri? = null
+var garmentId: String? = null
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -48,7 +49,6 @@ class MainActivity : ComponentActivity() {
                     systemUiController.setStatusBarColor(MaterialTheme.colors.background)
                     screenWidth = LocalConfiguration.current.screenWidthDp.dp
                     screenHeight = LocalConfiguration.current.screenHeightDp.dp
-                    //Firebase.auth.signOut()
                     val start = if (Firebase.auth.currentUser != null) {
                         AppScreens.MainScreen.route
                     } else {
@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                 if (resultCode == Activity.RESULT_OK) {
                     val intent = Intent(this, ResultActivity::class.java)
                     intent.putExtra("uri", imageUri)
-                    //intent.putExtra("garmentId", garmentId)
+                    intent.putExtra("garmentId", garmentId)
                     this.startActivity(intent)
                 }
             }

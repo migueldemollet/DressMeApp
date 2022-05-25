@@ -79,6 +79,7 @@ fun AppNavigation(start: String) {
                 refreshData = viewModel::getGarmentList
             )
         }
+
         composable(
             route = AppScreens.GarmentTryOnScreen.route + "/{garmentId}/{garmentColor}/{garmentType}",
         ) {
