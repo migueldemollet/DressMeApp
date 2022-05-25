@@ -1,10 +1,7 @@
 package com.migueldemollet.dressmeapp.screens.main.components
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
@@ -26,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.migueldemollet.dressmeapp.R
@@ -39,14 +37,10 @@ fun LeftMenu(
     navController: NavController
 ) {
     Column(
-        modifier = Modifier.padding(top = screenHeight * 0.15f),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(
-            text = "DressMeApp",
-            color = MaterialTheme.colors.onBackground,
-        )
+        Logo()
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -92,6 +86,28 @@ fun LeftMenu(
             textAlign = TextAlign.Center
         )
     }
+}
+
+@Composable
+fun Logo() {
+    val logo = if (isSystemInDarkTheme()) {
+        painterResource(id = R.drawable.dress_me_app_white)
+    } else {
+        painterResource(id = R.drawable.dress_me_app_black)
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+
+        ) {
+        Image(
+            painter = logo,
+            contentDescription = "logo_image",
+            modifier = Modifier
+                .width(screenWidth / 4)
+        )
+    }
+
 }
 
 @Preview(showSystemUi = true)

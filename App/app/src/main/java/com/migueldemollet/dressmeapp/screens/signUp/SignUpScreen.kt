@@ -17,7 +17,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.migueldemollet.dressmeapp.screenHeight
 import com.migueldemollet.dressmeapp.screenWidth
 import com.migueldemollet.dressmeapp.screens.logIn.components.EventDialog
-import com.migueldemollet.dressmeapp.screens.main.Logo
+import com.migueldemollet.dressmeapp.screens.main.components.Logo
 import com.migueldemollet.dressmeapp.screens.signUp.components.AlternativeSignUp
 import com.migueldemollet.dressmeapp.screens.signUp.components.LogInButton
 import com.migueldemollet.dressmeapp.screens.signUp.components.SignUpForm

@@ -80,7 +80,6 @@ fun MainScreen(
 
         val textState = remember { mutableStateOf(TextFieldValue("")) }
         Column {
-            //Logo()
             FilterSection(textState)
             BoxComponent(
                 state = state,
@@ -99,33 +98,10 @@ fun MainScreen(
 }
 
 @Composable
-fun Logo() {
-    val logo = if (isSystemInDarkTheme()) {
-        painterResource(id = R.drawable.dress_me_app_white)
-    } else {
-        painterResource(id = R.drawable.dress_me_app_black)
-    }
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-
-        ) {
-        Image(
-            painter = logo,
-            contentDescription = "logo_image",
-            modifier = Modifier
-                .width(screenWidth / 4)
-                .clickable(onClick = { TODO() })
-        )
-    }
-
-}
-
-@Composable
 fun FilterSection(textState: MutableState<TextFieldValue>) {
     Column() {
         SearchView(textState)
-        FilterComponent(filters = filters)
+        //FilterComponent(filters = filters)
     }
 }
 

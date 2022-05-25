@@ -15,7 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.migueldemollet.dressmeapp.model.Garment
 import com.migueldemollet.dressmeapp.R
 
@@ -23,14 +22,14 @@ import com.migueldemollet.dressmeapp.R
 fun CardBox(
     garment: Garment,
     componentWidth: Dp,
-    omponentHeight: Dp,
+    componentHeight: Dp,
     onItemClick: (Garment) -> Unit
 ) {
     Card(
         modifier = Modifier
             .padding(end = 5.dp)
             .width(componentWidth)
-            .height(omponentHeight)
+            .height(componentHeight)
             .clickable(onClick = { onItemClick(garment) }),
         shape = RoundedCornerShape(15.dp),
         elevation = 10.dp,
@@ -57,8 +56,6 @@ fun CardBox(
                 contentDescription = "",
                 modifier = Modifier
                     .padding(4.dp)
-                    .width(componentWidth / 2)
-                    .height(omponentHeight / 2)
                     .clip(RoundedCornerShape(15.dp)),
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.Center,

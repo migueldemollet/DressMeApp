@@ -20,7 +20,7 @@ import com.migueldemollet.dressmeapp.screens.logIn.components.AlternativeLogIn
 import com.migueldemollet.dressmeapp.screens.logIn.components.EventDialog
 import com.migueldemollet.dressmeapp.screens.logIn.components.LogInForm
 import com.migueldemollet.dressmeapp.screens.logIn.components.SignUpButton
-import com.migueldemollet.dressmeapp.screens.main.Logo
+import com.migueldemollet.dressmeapp.screens.main.components.Logo
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 
 @Composable
