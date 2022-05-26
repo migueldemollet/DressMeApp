@@ -32,7 +32,7 @@ var screenHeight = 0.dp
 var isCameraSelected = false
 var imageUri: Uri? = null
 var garmentId: String? = null
-var imgResult: Bitmap? = null
+var imgResult: String? = null
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

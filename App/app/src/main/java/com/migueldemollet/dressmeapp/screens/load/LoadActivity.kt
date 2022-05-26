@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import coil.ImageLoader
@@ -31,7 +32,6 @@ import com.migueldemollet.dressmeapp.screens.result.ResultActivity
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 
 class LoadActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,6 +121,7 @@ class LoadActivity : ComponentActivity() {
         return img
     }
 
+    @Composable
     @OptIn(ExperimentalMaterialApi::class)
     fun sendPostRequest(image: Bitmap, garmentId: String) {
         val img = encodeImage(image)
@@ -140,17 +141,14 @@ class LoadActivity : ComponentActivity() {
                     }
                     is Result.Success -> {
                         val data = result.get()
-                        lifecycleScope.launch {
-                            imgResult = getBitmap(data)
-                        }
+                        imgResult = data
                         val Intent = Intent(this, ResultActivity::class.java)
                         startActivity(Intent)
                         finish()
-
                     }
                 }
             }
-
+        AnimatedShimmer(screenWidth = screenWidth, screen = 2)
         httpAsync.join()
     }
 

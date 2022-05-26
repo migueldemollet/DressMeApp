@@ -60,7 +60,7 @@ class ResultActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun ResultScreen(image: Bitmap) {
+    private fun ResultScreen(image: String) {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -75,16 +75,7 @@ class ResultActivity : ComponentActivity() {
                         }
                     },
                     title = { Text("DressMeApp") },
-                    backgroundColor = MaterialTheme.colors.primary,
-                    actions = {
-                        IconButton(onClick = { saveImage(image) }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.download),
-                                contentDescription = "Save",
-                                tint = Color.White
-                            )
-                        }
-                    }
+                    backgroundColor = MaterialTheme.colors.primary
                 )
             }
         ) {
@@ -112,7 +103,7 @@ class ResultActivity : ComponentActivity() {
                 {
                     Button(
                         onClick = {
-                            shareImage(image)
+                            finish()
                         },
                         modifier = Modifier
                             .padding(top = 10.dp, bottom = 10.dp)
@@ -124,7 +115,7 @@ class ResultActivity : ComponentActivity() {
                         ),
                         shape = RoundedCornerShape(15.dp)
                     ) {
-                        Text("Share")
+                        Text("Try another")
                     }
                 }
             }
