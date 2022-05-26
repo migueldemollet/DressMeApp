@@ -55,7 +55,7 @@ fun BoxComponent(
             }
         }
         if (state.isLoading) {
-            AnimatedShimmer(screenWidth = screenWidth)
+            AnimatedShimmer(screenWidth = screenWidth, screen = 1)
         }
     }
 }

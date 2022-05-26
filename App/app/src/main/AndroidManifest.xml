@@ -4,9 +4,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:name=".FireBaseApplication"
@@ -15,7 +16,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DressMeApp">
+        android:theme="@style/Theme.DressMeApp"
+        android:usesCleartextTraffic="true">
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -32,6 +34,13 @@
             android:exported="false"
             android:label="@string/title_activity_camara"
             android:theme="@style/Theme.DressMeApp" />
+
+        <activity
+            android:name=".screens.load.LoadActivity"
+            android:exported="false"
+            android:label="@string/title_activity_load"
+            android:theme="@style/Theme.DressMeApp" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

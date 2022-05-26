@@ -1,20 +1,29 @@
 package com.migueldemollet.dressmeapp
 
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun AnimatedShimmer(screenWidth: Dp) {
+fun AnimatedShimmer(screenWidth: Dp, screen: Int) {
     val ShimmerColors = listOf(
         Color.LightGray.copy(alpha = 0.6f),
         Color.LightGray.copy(alpha = 0.2f),
@@ -44,11 +53,17 @@ fun AnimatedShimmer(screenWidth: Dp) {
     )
     val widthComponentCard = screenWidth / 3 - 10.dp
     val widthComponentFilter = screenWidth / 4 - 10.dp
-    ShimmerMainScreen(
-        brush = brush,
-        widthComponentFilter = widthComponentFilter,
-        widthComponentCard = widthComponentCard
-    )
+    when(screen) {
+        1 -> {
+            ShimmerMainScreen(
+                brush = brush,
+                widthComponentFilter = widthComponentFilter,
+                widthComponentCard = widthComponentCard
+            )
+        }
+        2 -> { ShimmerLoadScreen(brush = brush) }
+    }
+
 }
 
 @Composable
@@ -76,5 +91,33 @@ private fun ShimmerMainScreen(brush: Brush, widthComponentFilter: Dp, widthCompo
             }
         }
     }
-
 }
+
+    @Composable
+    private fun ShimmerLoadScreen(brush: Brush) {
+        Column() {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.90f)
+                    .background(brush)
+            )
+            Row(
+                modifier = Modifier
+                    .width(screenWidth)
+                    .fillMaxHeight()
+                    .padding(start = 10.dp, end = 10.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            )
+            {
+                Spacer(
+                    modifier = Modifier
+                        .padding(top = 10.dp, bottom = 10.dp)
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .background(brush),
+                )
+            }
+        }
+    }

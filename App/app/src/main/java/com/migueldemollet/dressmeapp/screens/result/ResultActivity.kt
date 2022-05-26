@@ -1,6 +1,7 @@
 package com.migueldemollet.dressmeapp.screens.result
 
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.content.res.Configuration
@@ -25,21 +26,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.migueldemollet.dressmeapp.*
 import com.migueldemollet.dressmeapp.R
-import com.migueldemollet.dressmeapp.screenHeight
-import com.migueldemollet.dressmeapp.screenWidth
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 import java.io.*
 
+
 @ExperimentalMaterialApi
 class ResultActivity : ComponentActivity() {
+    @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -51,10 +53,7 @@ class ResultActivity : ComponentActivity() {
                 ) {
                     val systemUiController = rememberSystemUiController()
                     systemUiController.setStatusBarColor(MaterialTheme.colors.primary)
-                    val img = getImage()!!
-
-                    val imgResized = getScaledDownBitmap(img, 1000, false)
-                    ResultScreen(image = imgResized)
+                    ResultScreen(image = imgResult!!)
                 }
             }
         }
@@ -91,7 +90,10 @@ class ResultActivity : ComponentActivity() {
         ) {
             Column() {
                 Image(
-                    bitmap = image.asImageBitmap(),
+                    painter = rememberAsyncImagePainter(
+                        model = image,
+                        placeholder = painterResource(id =R.drawable.load_image),
+                    ),
                     contentDescription = "Image",
                     alignment = Alignment.TopCenter,
                     modifier = Modifier
@@ -245,7 +247,7 @@ class ResultActivity : ComponentActivity() {
             ) {
                 screenWidth = LocalConfiguration.current.screenWidthDp.dp
                 screenHeight = LocalConfiguration.current.screenHeightDp.dp
-                ResultScreen(image = getImage()!!)
+                //ResultScreen(image = getImage()!!)
             }
         }
     }

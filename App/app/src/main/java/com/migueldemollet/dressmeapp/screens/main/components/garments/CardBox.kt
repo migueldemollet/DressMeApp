@@ -41,7 +41,7 @@ fun CardBox(
         ) {
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = garment.image,
+                    model = garment.image_low,
                     placeholder = painterResource(id =R.drawable.load_image),
                 ),
                 contentDescription = "",

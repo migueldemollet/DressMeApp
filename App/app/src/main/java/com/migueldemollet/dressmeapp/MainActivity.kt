@@ -2,6 +2,7 @@ package com.migueldemollet.dressmeapp
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -20,8 +21,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.migueldemollet.dressmeapp.navigation.AppNavigation
 import com.migueldemollet.dressmeapp.navigation.AppScreens
+import com.migueldemollet.dressmeapp.screens.load.LoadActivity
 import com.migueldemollet.dressmeapp.screens.logIn.LogInViewModel
-import com.migueldemollet.dressmeapp.screens.result.ResultActivity
 import com.migueldemollet.dressmeapp.screens.signUp.SignUpViewModel
 import com.migueldemollet.dressmeapp.ui.theme.DressMeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +32,7 @@ var screenHeight = 0.dp
 var isCameraSelected = false
 var imageUri: Uri? = null
 var garmentId: String? = null
+var imgResult: Bitmap? = null
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -77,7 +79,7 @@ class MainActivity : ComponentActivity() {
             }
             else -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    val intent = Intent(this, ResultActivity::class.java)
+                    val intent = Intent(this, LoadActivity::class.java)
                     intent.putExtra("uri", imageUri)
                     intent.putExtra("garmentId", garmentId)
                     this.startActivity(intent)
