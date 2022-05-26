@@ -48,8 +48,6 @@ class LoadActivity : ComponentActivity() {
                     val img = getImage()!!
 
                     val imgResized = getScaledDownBitmap(img, 1000, false)
-                    val imageString = createImageData(intent.getParcelableExtra<Uri>("uri")!!)
-                    //uploadImage(imgResized, intent.getStringExtra("garmentId")!!)
                     sendPostRequest(imgResized, intent.getStringExtra("garmentId")!!)
                     AnimatedShimmer(screenWidth = screenWidth, screen = 2)
                 }
@@ -122,17 +120,6 @@ class LoadActivity : ComponentActivity() {
         }
         return img
     }
-
-    @Throws(IOException::class)
-    private fun createImageData(uri: Uri): ByteArray? {
-        var imageData: ByteArray? = null
-        val inputStream = contentResolver.openInputStream(uri)
-        inputStream?.buffered()?.use {
-            imageData = it.readBytes()
-        }
-        return imageData
-    }
-
 
     @OptIn(ExperimentalMaterialApi::class)
     fun sendPostRequest(image: Bitmap, garmentId: String) {
