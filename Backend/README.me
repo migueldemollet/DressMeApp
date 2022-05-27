@@ -1,0 +1,22 @@
+En esta carpeta encontramos el backend de la aplicacion. Al tener 4 modelos distinto hemos decidido crear un
+script en bash que va realizando las llamadas necesarias. Disculpa por el desorden, pero la compljidad de
+la aplicacion fue mas alta de lo pre-visto y tuvimos que hacerlo asi.
+
+Ficheros:
+- preprocessing.py:
+    - Funciones para preprocesar el input de los datos (leer ficheros, u2net y segmentaicion semantica con etiquedao propio)
+- preprocessing.sh:
+    - Scrip que se encarga de preparar la estructura de carpetas para la inferencia de la aplicacion.
+    - Llama al fichero preprocessing.py para realizar la preprocesacion de los datos.
+    - Limpia el directorio y prepara el output
+- test.py:
+    - Es llamado por preprocessing.py y realiza la inferencia del modelo VITON-HD
+- server-test.py:
+    - API escito en python con Flask que se encarga de recibir los datos de la aplicacion y realizar la inferencia llamando a preprocessing.sh
+    
+Los comandos para desplegar la aplicacion en el servidor son:
+
+    cd /home/juanma_caaz_gmail_com/VITON-HD
+    export GOOGLE_APPLICATION_CREDENTIALS="dressmeapp-348622-firebase-adminsdk-8zkqy-b8fbd66ad7.json"
+    export FLASK_APP="server_test.py"
+    flask run --host=0.0.0.0 --port=8000

@@ -1,0 +1,3 @@
+export GOOGLE_APPLICATION_CREDENTIALS="dressmeapp-348622-firebase-adminsdk-8zkqy-b8fbd66ad7.json"
+
+uvicorn main:app --reload
