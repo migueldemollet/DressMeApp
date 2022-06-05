@@ -15,7 +15,6 @@ Mobile application with which you can try on clothes without the need to go to t
    * [How to contribute](#How-to-contribute)
    * [Citing](#citing)
    * [Authors](#authors)
-   * [Bibliography](#bibliography)
 
 # What is this?
 This project was carried out in a hackathon in which it had a period of one month, the objective of this is to demonstrate that with deep learning models we can carry out an innovative application in the fashion sector, providing the user with a new experience when trying new clothing.
